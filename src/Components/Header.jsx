@@ -20,7 +20,7 @@ const Header = () => {
          const getSocialList = () => {
             getAllSocial()
                 .then((res) => {
-                  console.log(res,"yuvi")
+                  
                     setSocial(res?.data?.details);
                 })
                 .catch((err) => {
@@ -30,7 +30,7 @@ const Header = () => {
          const getTopBarList = () => {
             getAllTopBar()
                 .then((res) => {
-                  console.log(res,"top")
+                
                     setTopBar(res?.data?.details);
                 })
                 .catch((err) => {
