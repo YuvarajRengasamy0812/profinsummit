@@ -1,9 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
+import { getAllSocial } from '../api/socialmedia';
+
 import BackToTop from "../Components/Backtotop";
 import SubscribeForm from "./SubscribeForm";
 
 function Footer() {
+
+
+  const [social, setSocial] = useState([]);
+        useEffect(() => {
+          getSocialList()
+         
+      }, [])
+  
+       const getSocialList = () => {
+          getAllSocial()
+              .then((res) => {
+                console.log(res,"yuvi")
+                  setSocial(res?.data);
+              })
+              .catch((err) => {
+                  console.log(err);
+              });
+      };
   return (
     <div>
       {/*--Subscribe Section start--*/}
@@ -76,23 +96,23 @@ function Footer() {
                   {[
                     {
                       icon: "facebook",
-                      url: "https://www.facebook.com/share/qVva5zrCuYdkqGJJ/?mibextid=qi2Omg",
+                     url: social.facebook || "#",
                     },
                     {
                       icon: "twitter",
-                      url: "https://x.com/profx_media",
+                      url: social.twitter || "#",
                     },
                     {
                       icon: "instagram",
-                      url: "https://www.instagram.com/profxmedia.official/",
+                      url:social.instagram || "#",
                     },
                     {
                       icon: "youtube",
-                      url: "https://www.youtube.com/@ProfxMedia",
+                      url: social.youtube || "#",
                     },
                     {
                       icon: "linkedin",
-                      url: "https://www.linkedin.com/company/profxmedia/",
+                      url:social.linkedin || "#",
                     },
                   ].map((item, i) => (
                     <li key={i} className="d-inline">

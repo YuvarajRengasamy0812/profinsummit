@@ -15,6 +15,7 @@ const CustomNavbar = () => {
      const getHedaerList = () => {
         getAllHeader()
             .then((res) => {
+              console.log(res,"yuvi")
                 setMenuLinks(res?.data?.links);
             })
             .catch((err) => {

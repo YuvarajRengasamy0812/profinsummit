@@ -1,10 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from 'react';
 import Navbar from "./Navbar";
 import { Link } from "react-router-dom";
 import Search from "../Components/Search";
 import CustomNavbar from "./CustomNavbar";
+import { getAllSocial } from '../api/socialmedia';
+import { getAllTopBar } from '../api/topbar';
 
 const Header = () => {
+
+    const [social, setSocial] = useState([]);
+    const [topbar, setTopBar] = useState([]);
+
+          useEffect(() => {
+            getSocialList();
+            getTopBarList()
+           
+        }, [])
+    
+         const getSocialList = () => {
+            getAllSocial()
+                .then((res) => {
+                  console.log(res,"yuvi")
+                    setSocial(res?.data?.details);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        };
+         const getTopBarList = () => {
+            getAllTopBar()
+                .then((res) => {
+                  console.log(res,"top")
+                    setTopBar(res?.data?.details);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        };
   return (
     <header className="main_header_area position-absolute w-100 site-header">
       {/* Top bar with social and contact info */}
@@ -35,23 +67,23 @@ const Header = () => {
                   {[
                     {
                       icon: "facebook",
-                      url: "https://www.facebook.com/share/qVva5zrCuYdkqGJJ/?mibextid=qi2Omg",
+                     url: social.facebook || "#",
                     },
                     {
                       icon: "twitter",
-                      url: "https://x.com/profx_media",
+                      url: social.twitter || "#",
                     },
                     {
                       icon: "instagram",
-                      url: "https://www.instagram.com/profxmedia.official/",
+                      url:social.instagram || "#",
                     },
                     {
                       icon: "youtube",
-                      url: "https://www.youtube.com/@ProfxMedia",
+                      url: social.youtube || "#",
                     },
                     {
                       icon: "linkedin",
-                      url: "https://www.linkedin.com/company/profxmedia/",
+                      url:social.linkedin || "#",
                     },
                   ].map((item, i) => (
                     <li key={i} className="d-inline">
@@ -74,15 +106,15 @@ const Header = () => {
                   <ul className="m-0 p-0">
                     <li className="px-2 border-end border-lightgrey border-opacity-50 d-inline">
                       <i className="fa fa-phone pe-1"></i>
-                      <small><a className="social-url" href="tel:+91 9629896298">+91 9629896298</a></small>
+                      <small><a className="social-url" href={`tel:${topbar.phone}`}>{topbar.phone}</a></small>
                     </li>
                     <li className="px-2 border-end border-lightgrey border-opacity-50 d-inline">
                       <i className="fa fa-envelope-o pe-1"></i>
-                      <small><a className="social-url" href="mailto:proof@profinsummit.com">info@profinsummit.com</a></small>
+                      <small><a className="social-url" href={`mailto:${topbar.email}`}>{topbar.email}</a></small>
                     </li>
                     <li className="px-2 d-inline">
                       <i className="fa fa-clock-o pe-1"></i>
-                      <small>Mon - Fri: 9:00 - 18:30</small>
+                      <small>{topbar.working_time}</small>
                     </li>
                   </ul>
                 </div>
