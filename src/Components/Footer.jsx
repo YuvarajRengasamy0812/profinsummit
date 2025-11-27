@@ -4,13 +4,16 @@ import { getAllSocial } from '../api/socialmedia';
 
 import BackToTop from "../Components/Backtotop";
 import SubscribeForm from "./SubscribeForm";
+import { getAllLog } from '../api/style';
 
 function Footer() {
 
 
   const [social, setSocial] = useState([]);
+  const [logo, setLogo] = useState([]);
         useEffect(() => {
-          getSocialList()
+          getSocialList();
+            getLogo();
          
       }, [])
   
@@ -24,6 +27,16 @@ function Footer() {
                   console.log(err);
               });
       };
+        const getLogo = () => {
+                  getAllLog()
+                      .then((res) => {
+                      console.log("logos")
+                          setLogo(res?.data?.details);
+                      })
+                      .catch((err) => {
+                          console.log(err);
+                      });
+              };
   return (
     <div>
       {/*--Subscribe Section start--*/}
@@ -61,7 +74,7 @@ function Footer() {
             <div className="footer-logo mb-4 pt-1">
               <Link to="/">
                 <img
-                  src="assets/images/logo/logo-white.png"
+                  src={logo.logo}
                   className="w-50"
                   alt="footer-logo"
                 />
