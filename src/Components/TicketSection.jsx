@@ -21,9 +21,9 @@ const TicketSection = () => {
             </div>
 
             <div className="price-options g-2 pb-6">
-              <div className="row g-4">
+              <div className="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
                 {/* General Tier */}
-                <div className="col-lg-3 col-md-6">
+                <div className="">
                   <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
                     <img
                       src="assets/images/pattern/1.png"
@@ -41,7 +41,7 @@ const TicketSection = () => {
                     <div className="ticket-price bg-white pt-6">
                       <div className="ticket-price-inner d-flex justify-content-center align-items-start black fw-bold">
                         <span className="me-1 mb-0 currency pink">₹</span>
-                        <span className="me-1 m-0 dollor pink">1,999</span>
+                        <span className="me-1 m-0 tic-text pink">1,999</span>
                       </div>
                       <p className="mt-2">Per Person</p>
                     </div>
@@ -84,7 +84,7 @@ const TicketSection = () => {
                 </div>
 
                 {/* Premium Tier */}
-                <div className="col-lg-3 col-md-6">
+                <div className="">
                   <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
                     <img
                       src="assets/images/pattern/2.png"
@@ -102,7 +102,7 @@ const TicketSection = () => {
                     <div className="ticket-price bg-white pt-6">
                       <div className="d-flex justify-content-center align-items-start fw-bold">
                         <span className="me-1 mb-0 currency elite">₹</span>
-                        <span className="me-1 m-0 dollor elite">3,499</span>
+                        <span className="me-1 m-0 tic-text elite">3,499</span>
                       </div>
                       <p className="mt-2">Per Person</p>
                     </div>
@@ -147,7 +147,7 @@ const TicketSection = () => {
                 </div>
 
                 {/* Business Tier */}
-                <div className="col-lg-3 col-md-6">
+                <div className="">
                   <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
                     <img
                       src="assets/images/pattern/5.png"
@@ -165,7 +165,7 @@ const TicketSection = () => {
                     <div className="ticket-price bg-white pt-6">
                       <div className="d-flex justify-content-center align-items-start fw-bold">
                         <span className="me-1 mb-0 currency business">₹</span>
-                        <span className="me-1 m-0 dollor business">9,999</span>
+                        <span className="me-1 m-0 tic-text business">9,999</span>
                       </div>
                       <p className="mt-2">Per Person</p>
                     </div>
@@ -214,7 +214,7 @@ const TicketSection = () => {
                 </div>
 
                 {/* VIP Tier */}
-                <div className="col-lg-3 col-md-6">
+                <div className="">
                   <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
                     <img
                       src="assets/images/pattern/4.png"
@@ -232,7 +232,7 @@ const TicketSection = () => {
                     <div className="ticket-price pt-6 bg-white">
                       <div className="d-flex justify-content-center align-items-start fw-bold">
                         <span className="me-1 currency vip">₹</span>
-                        <span className="me-1 dollor vip">24,999</span>
+                        <span className="me-1 tic-text vip">24,999</span>
                       </div>
                       <p className="mt-2">Per Person</p>
                     </div>
@@ -277,7 +277,7 @@ const TicketSection = () => {
                 </div>
 
                 {/* Student Tier */}
-                <div className="col-lg-3 col-md-6">
+                <div className="">
                   <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
                     <img
                       src="assets/images/pattern/6.png"
@@ -288,14 +288,14 @@ const TicketSection = () => {
                     <div className="ticket-title py-6 bg-student text-white">
                       <h4 className="text-white mb-1">STUDENT PASS</h4>
                       <p>
-                        <b>Note:</b> Valid Student ID Required{" "}
+                        <b>Note:</b> Valid Student ID{" "}
                       </p>
                     </div>
 
                     <div className="ticket-price pt-6 bg-white">
                       <div className="d-flex justify-content-center align-items-start fw-bold">
                         <span className="me-1 currency student">₹</span>
-                        <span className="me-1 dollor student">999</span>
+                        <span className="me-1 tic-text student">999</span>
                       </div>
                       <p className="mt-2">Per Person</p>
                     </div>
