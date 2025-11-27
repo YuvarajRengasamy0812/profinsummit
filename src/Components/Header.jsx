@@ -5,15 +5,21 @@ import Search from "../Components/Search";
 import CustomNavbar from "./CustomNavbar";
 import { getAllSocial } from '../api/socialmedia';
 import { getAllTopBar } from '../api/topbar';
+import { getAllLog } from '../api/style';
+
+
 
 const Header = () => {
 
     const [social, setSocial] = useState([]);
     const [topbar, setTopBar] = useState([]);
+    const [logo, setLogo] = useState([]);
+
 
           useEffect(() => {
             getSocialList();
-            getTopBarList()
+            getTopBarList();
+            getLogo();
            
         }, [])
     
@@ -32,6 +38,16 @@ const Header = () => {
                 .then((res) => {
                 
                     setTopBar(res?.data?.details);
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
+        };
+         const getLogo = () => {
+            getAllLog()
+                .then((res) => {
+                console.log("logos")
+                    setLogo(res?.data?.details);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -133,10 +149,10 @@ const Header = () => {
                 <div className="navbar-brand m-0">
                   <Link to="/">
                     <img
-                      src="assets/images/logo/logo-white.png"
+                      src={logo.logo}
                       alt="Logo"
                       className=""
-                      style={{maxWidth:"125px"}}
+                      style={{maxWidth:"155px"}}
                     />
                   </Link>
                 </div>
