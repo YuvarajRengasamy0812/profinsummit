@@ -24,7 +24,7 @@ function Footer() {
     getAllSocial()
       .then((res) => {
         console.log(res, "yuvi")
-        setSocial(res?.data);
+        setSocial(res?.data?.details);
       })
       .catch((err) => {
         console.log(err);
@@ -66,8 +66,6 @@ function Footer() {
       })
       .catch((err) => console.log(err));
   };
-
-
 
   return (
     <div>
