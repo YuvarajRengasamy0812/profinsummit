@@ -3,19 +3,21 @@ import { Link } from "react-router-dom";
 
 import BackToTop from "../Components/Backtotop";
 import SubscribeForm from "./SubscribeForm";
-import { getAllLog } from '../api/style';
 
 import { getAllHeader } from '../api/header';
 import { getAllSocial } from '../api/socialmedia';
+import { getAllLog } from '../api/style';
 
 
 function Footer() {
   const [social, setSocial] = useState([]);
   const [footerLinks, setFooterLinks] = useState([]);
+  const [logo, setLogo] = useState([]);
 
   useEffect(() => {
-    getSocialList()
-    fetchHeaderLinks()
+    getSocialList();
+    fetchHeaderLinks();
+    getLogo();
   }, [])
 
   const getSocialList = () => {
@@ -23,6 +25,17 @@ function Footer() {
       .then((res) => {
         console.log(res, "yuvi")
         setSocial(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getLogo = () => {
+    getAllLog()
+      .then((res) => {
+        console.log("logos")
+        setLogo(res?.data?.details);
       })
       .catch((err) => {
         console.log(err);
