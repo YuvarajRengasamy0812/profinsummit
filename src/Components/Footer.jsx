@@ -1,42 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-import { getAllSocial } from '../api/socialmedia';
 
 import BackToTop from "../Components/Backtotop";
 import SubscribeForm from "./SubscribeForm";
+
+import { getAllHeader } from '../api/header';
+import { getAllSocial } from '../api/socialmedia';
 import { getAllLog } from '../api/style';
 
+
 function Footer() {
-
-
   const [social, setSocial] = useState([]);
+  const [footerLinks, setFooterLinks] = useState([]);
   const [logo, setLogo] = useState([]);
-        useEffect(() => {
-          getSocialList();
-            getLogo();
-         
-      }, [])
-  
-       const getSocialList = () => {
-          getAllSocial()
-              .then((res) => {
-                console.log(res,"yuvi")
-                  setSocial(res?.data);
-              })
-              .catch((err) => {
-                  console.log(err);
-              });
-      };
-        const getLogo = () => {
-                  getAllLog()
-                      .then((res) => {
-                      console.log("logos")
-                          setLogo(res?.data?.details);
-                      })
-                      .catch((err) => {
-                          console.log(err);
-                      });
-              };
+
+  useEffect(() => {
+    getSocialList();
+    fetchHeaderLinks();
+    getLogo();
+  }, [])
+
+  const getSocialList = () => {
+    getAllSocial()
+      .then((res) => {
+        console.log(res, "yuvi")
+        setSocial(res?.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const getLogo = () => {
+    getAllLog()
+      .then((res) => {
+        console.log("logos")
+        setLogo(res?.data?.details);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchHeaderLinks = () => {
+    getAllHeader()
+      .then((res) => {
+        console.log(res, "footer menu");
+
+        let all = res?.data?.links || [];
+
+        const needed = ["About", "Agenda", "Tickets", "Contact"];
+
+        // Pick needed main menu items
+        let filtered = all.filter(item => needed.includes(item.title));
+
+        // Contact must come from sub_links of "Company"
+        const company = all.find(item => item.title === "Company");
+
+        if (company && company.sub_links) {
+          const contact = company.sub_links.find(s => s.title === "Contact");
+          if (contact) filtered.push(contact);
+        }
+
+        setFooterLinks(filtered);
+      })
+      .catch((err) => console.log(err));
+  };
+
+
+
   return (
     <div>
       {/*--Subscribe Section start--*/}
@@ -87,29 +119,11 @@ function Footer() {
                 Be part of India’s decentralized future.
               </p>
               <div className="footer-socials pb-6">
-                {/* <ul className="m-0 p-0 d-flex gap-2 justify-content-center">
-                  {[
-                    "facebook",
-                    "twitter",
-                    "google",
-                    "instagram",
-                    "youtube-play",
-                  ].map((icon, i) => (
-                    <li key={i} className="d-inline">
-                      <a
-                        href="#"
-                        className="d-inline-block rounded-circle bg-white  bg-opacity-25"
-                      >
-                        <i className={`fa fa-${icon}`}></i>
-                      </a>
-                    </li>
-                  ))}
-                </ul> */}
                 <ul className="m-0 p-0 d-flex gap-2 justify-content-center">
                   {[
                     {
                       icon: "facebook",
-                     url: social.facebook || "#",
+                      url: social.facebook || "#",
                     },
                     {
                       icon: "twitter",
@@ -117,7 +131,7 @@ function Footer() {
                     },
                     {
                       icon: "instagram",
-                      url:social.instagram || "#",
+                      url: social.instagram || "#",
                     },
                     {
                       icon: "youtube",
@@ -125,7 +139,7 @@ function Footer() {
                     },
                     {
                       icon: "linkedin",
-                      url:social.linkedin || "#",
+                      url: social.linkedin || "#",
                     },
                   ].map((item, i) => (
                     <li key={i} className="d-inline">
@@ -145,33 +159,16 @@ function Footer() {
             </div>
             <div className="footer-menu pb-9">
               <ul className="p-0 m-0">
-                <li className="d-inline mx-2">
-                  <Link to="/About">
-                    <small>About Event</small>
-                  </Link>
-                </li>
-                {/* <li className="d-inline mx-2">
-                  <Link to="/Speakerlists">
-                    <small>Speakers</small>
-                  </Link>
-                </li> */}
-                <li className="d-inline mx-2">
-                  <Link to="/Eventlists">
-                    <small>Schedule</small>
-                  </Link>
-                </li>
-                <li className="d-inline mx-2">
-                  <Link to="/Pricing">
-                    <small>Ticket Pricing</small>
-                  </Link>
-                </li>
-                <li className="d-inline mx-2">
-                  <Link to="/Contact">
-                    <small>Contact Us</small>
-                  </Link>
-                </li>
+                {footerLinks.map((item, i) => (
+                  <li key={i} className="d-inline mx-2">
+                    <Link to={item.href || "#"}>
+                      <small>{item.title === "Tickets" ? "Ticket Booking" : item.title}</small>
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
+
           </div>
           <div className="copyright pb-6 pt-1">
             <small>
