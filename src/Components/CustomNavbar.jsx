@@ -15,6 +15,7 @@ const CustomNavbar = () => {
      const getHedaerList = () => {
         getAllHeader()
             .then((res) => {
+              console.log("header data", res);
                 setMenuLinks(res?.data?.links);
             })
             .catch((err) => {
