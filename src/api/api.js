@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // const API = axios.create({ baseURL: 'http://localhost:4000/api/'});
-const API = axios.create({baseURL:"https://staging.profinsummit.com/adminpanel/api/v1"})
+const API = axios.create({baseURL:"http://localhost/profinsummit/api/v1"})
+// const API = axios.create({baseURL:"https://staging.profinsummit.com/adminpanel/api/v1"})
+
 
 API.interceptors.request.use(request => {
     const token = localStorage.getItem("token")

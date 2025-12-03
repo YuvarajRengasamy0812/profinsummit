@@ -8,240 +8,47 @@ import {
   Share2,
   X,
 } from "lucide-react";
+import { getAllGallery } from '../api/gallery';
 
-export default function Gallery({ limit = null }) {  // ⬅ NEW
-  const tabs = ["All", "Speakers", "Expo Zone", "Workshops", "Networking"];
-
-  const images = [
-    {
-      thumb: "assets/images/gallery/Speakers1.png",
-      full: "assets/images/gallery/Speakers1.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers2.png",
-      full: "assets/images/gallery/Speakers2.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers3.png",
-      full: "assets/images/gallery/Speakers3.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers4.png",
-      full: "assets/images/gallery/Speakers4.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers5.png",
-      full: "assets/images/gallery/Speakers5.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers6.png",
-      full: "assets/images/gallery/Speakers6.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers7.png",
-      full: "assets/images/gallery/Speakers7.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers8.png",
-      full: "assets/images/gallery/Speakers8.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers9.png",
-      full: "assets/images/gallery/Speakers9.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Speakers10.png",
-      full: "assets/images/gallery/Speakers10.png",
-      alt: "Speakers",
-      category: "Speakers",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone1.png",
-      full: "assets/images/gallery/Expozone1.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone2.png",
-      full: "assets/images/gallery/Expozone2.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone3.png",
-      full: "assets/images/gallery/Expozone3.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone4.png",
-      full: "assets/images/gallery/Expozone4.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone5.png",
-      full: "assets/images/gallery/Expozone5.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone6.png",
-      full: "assets/images/gallery/Expozone6.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone7.png",
-      full: "assets/images/gallery/Expozone7.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone8.png",
-      full: "assets/images/gallery/Expozone8.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone9.png",
-      full: "assets/images/gallery/Expozone9.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone10.png",
-      full: "assets/images/gallery/Expozone10.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone11.png",
-      full: "assets/images/gallery/Expozone11.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone12.png",
-      full: "assets/images/gallery/Expozone12.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone13.png",
-      full: "assets/images/gallery/Expozone13.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone14.png",
-      full: "assets/images/gallery/Expozone14.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/Expozone15.png",
-      full: "assets/images/gallery/Expozone15.png",
-      alt: "Expo Zone Booth",
-      category: "Expo Zone",
-    },
-    {
-      thumb: "assets/images/gallery/workshop1.png",
-      full: "assets/images/gallery/workshop1.png",
-      alt: "Workshop Training",
-      category: "Workshops",
-    },
-    {
-      thumb: "assets/images/gallery/workshop2.png",
-      full: "assets/images/gallery/workshop2.png",
-      alt: "Workshop Training",
-      category: "Workshops",
-    },
-    {
-      thumb: "assets/images/gallery/workshop3.png",
-      full: "assets/images/gallery/workshop3.png",
-      alt: "Workshop Training",
-      category: "Workshops",
-    },
-    {
-      thumb: "assets/images/gallery/workshop4.png",
-      full: "assets/images/gallery/workshop4.png",
-      alt: "Workshop Training",
-      category: "Workshops",
-    },
-    {
-      thumb: "assets/images/gallery/Networking1.png",
-      full: "assets/images/gallery/Networking1.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-    {
-      thumb: "assets/images/gallery/Networking2.png",
-      full: "assets/images/gallery/Networking2.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-    {
-      thumb: "assets/images/gallery/Networking3.png",
-      full: "assets/images/gallery/Networking3.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-    {
-      thumb: "assets/images/gallery/Networking4.png",
-      full: "assets/images/gallery/Networking4.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-    {
-      thumb: "assets/images/gallery/Networking5.png",
-      full: "assets/images/gallery/Networking5.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-    {
-      thumb: "assets/images/gallery/Networking6.png",
-      full: "assets/images/gallery/Networking6.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-    {
-      thumb: "assets/images/gallery/Networking7.png",
-      full: "assets/images/gallery/Networking7.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-    {
-      thumb: "assets/images/gallery/Networking8.png",
-      full: "assets/images/gallery/Networking8.png",
-      alt: "Networking Event",
-      category: "Networking",
-    },
-
-  ];
-
+export default function Gallery({ limit = null }) { 
+  
+  const [images, setImages] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [zoom, setZoom] = useState(1);
   const imgRef = useRef(null);
+ useEffect(() => {
+    getGalleryList();
+  
+  }, [])
+
+  const getGalleryList = () => {
+    getAllGallery()
+      .then((res) => {
+        console.log(res, "Images")
+        const apiPhotos = res?.data?.photos || [];
+
+        // Convert API response to gallery format
+        const mapped = apiPhotos.map((p) => ({
+          thumb: p.url,
+          full: p.url,
+          alt: p.title,
+          category: res?.data?.topic_title || "All",
+        }));
+
+        setImages(mapped);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  
+  // ⬅ NEW
+  const tabs = ["All", "Speakers", "Expo Zone", "Workshops", "Networking"];
+
+ 
+
+
 
   // Filter first
   let filtered =
