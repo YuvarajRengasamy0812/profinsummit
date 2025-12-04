@@ -42,6 +42,9 @@ const ContactForm = () => {
           title: "Message Sent!",
           text: "Your message has been sent successfully.",
           confirmButtonText: "OK",
+          customClass: {
+            confirmButton: "my-swal-btn" // add a custom class
+          }
         });
 
         // Clear input fields
