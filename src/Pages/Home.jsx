@@ -102,16 +102,17 @@ function Home() {
                             SECURE EARLY BIRD TICKETS
                           </Link>
                         </div>
-                        {/* <div className="col-lg-6 col-md-6"
+                        <div className="col-lg-6 col-md-6"
                           data-aos="fade-up"
                           data-aos-delay="850">
-                          <Link
-                            to="/Eventlists"
+                          <a
+                            href="/assets/brochure/ProFin Blockchain Summit 2026 - Event Brochure.pdf"
+                            target="_blank"
                             className="btn btn2 my-1 w-100"
                           >
-                            WATCH THE THEME VIDEO
-                          </Link>
-                        </div> */}
+                            Download Event Brochure
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
