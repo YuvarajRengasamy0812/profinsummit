@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { postContactForm } from "../api/contactform";
+import Swal from "sweetalert2";
+import 'sweetalert2/themes/bulma.css'
 
-const Contactform = () => {
+const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -9,39 +12,63 @@ const Contactform = () => {
     message: "",
   });
 
-  const [status, setStatus] = useState(""); // Success or error message
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    const phoneRegex = /^[0-9]{10,15}$/; // Adjust as needed
-
-    // Example: Validate required fields
-    if (!formData.name || !formData.email || !formData.message) {
-      setStatus("Please fill in all required fields.");
-      return;
-    }
-
-    // Simulate a successful form submission (replace with real API call)
     try {
-      console.log("Submitted:", formData);
-      setStatus("Your message has been sent successfully!");
-
-      // Reset form
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
+      const response = await postContactForm({
+        api_key: "402784613679330",
+        contact_name: formData.name,
+        contact_email: formData.email,
+        contact_phone: formData.phone,
+        contact_subject: formData.subject,
+        contact_message: formData.message,
       });
+
+      if (response.data.code == "1") {
+        // Show success popup
+        Swal.fire({
+          title: 'Bulma theme',
+          theme: 'bulma',
+          icon: "success",
+          title: "Message Sent!",
+          text: "Your message has been sent successfully.",
+          confirmButtonText: "OK",
+        });
+
+        // Clear input fields
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        // Show error popup if backend returns a message
+        Swal.fire({
+          icon: "error",
+          title: "Oops!",
+          text: response.data.msg || "Something went wrong.",
+        });
+      }
     } catch (error) {
-      setStatus("Something went wrong. Please try again.");
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Server Error",
+        text: "Please try again later.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,6 +98,7 @@ const Contactform = () => {
           />
         </div>
       </div>
+
       <div className="phone-no">
         <input
           type="tel"
@@ -78,12 +106,13 @@ const Contactform = () => {
           placeholder="Phone No."
           className="mb-3"
           value={formData.phone}
-        onChange={handleChange}
-        pattern="[0-9]{10,15}"
-        title="Please enter a valid phone number (10–15 digits)"
-        required
+          onChange={handleChange}
+          pattern="[0-9]{10,15}"
+          title="Please enter a valid phone number (10–15 digits)"
+          required
         />
       </div>
+
       <div className="subject">
         <input
           type="text"
@@ -92,8 +121,10 @@ const Contactform = () => {
           className="mb-3"
           value={formData.subject}
           onChange={handleChange}
+          required
         />
       </div>
+
       <div className="message">
         <textarea
           name="message"
@@ -105,18 +136,13 @@ const Contactform = () => {
           required
         />
       </div>
-      <button type="submit" className="btn">
-        Send Message <i className="fa fa-long-arrow-right ms-3"></i>
-      </button>
 
-      {/* Status message */}
-      {status && (
-        <div className="mt-3 alert alert-info" role="alert">
-          {status}
-        </div>
-      )}
+      <button type="submit" className="btn" disabled={loading}>
+        {loading ? "Sending..." : "Send Message"}{" "}
+        <i className="fa fa-long-arrow-right ms-3"></i>
+      </button>
     </form>
   );
 };
 
-export default Contactform
+export default ContactForm;
