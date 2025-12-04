@@ -1241,7 +1241,18 @@ p.text-grey {
   }
 }
 
-/* Floor Plan  */
+/* sweetalert2 css */
+.my-swal-btn {
+  display: block;
+  margin: 0 auto!important; /* centers the button horizontally */
+  background: #e91e63;
+  border: none;
+}
+
+.my-swal-btn:hover {
+  background: rgba(233, 30, 99, 0.8);
+  border: none;
+}
 
 
 
