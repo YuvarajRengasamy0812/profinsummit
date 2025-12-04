@@ -17,46 +17,30 @@ export default function Gallery({ limit = null }) {
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [zoom, setZoom] = useState(1);
   const imgRef = useRef(null);
- useEffect(() => {
+
+  useEffect(() => {
     getGalleryList();
-  
   }, [])
 
   const getGalleryList = () => {
     getAllGallery()
       .then((res) => {
-        console.log(res, "Images")
-        const apiPhotos = res?.data?.photos || [];
-
-        // Convert API response to gallery format
-        const mapped = apiPhotos.map((p) => ({
-          thumb: p.url,
-          full: p.url,
-          alt: p.title,
-          category: res?.data?.topic_title || "All",
-        }));
-
-        setImages(mapped);
+        setImages(res?.data?.items || []);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  
-  // ⬅ NEW
-  const tabs = ["All", "Speakers", "Expo Zone", "Workshops", "Networking"];
 
- 
+  // ⬅ UNIQUE CATEGORY LIST
+  const categories = ["All", ...new Set(images.map((img) => img.category))];
 
-
-
-  // Filter first
+  // FILTERED IMAGES
   let filtered =
     activeTab === "All"
       ? images
       : images.filter((img) => img.category === activeTab);
 
-  // Apply limit if passed
   if (limit) {
     filtered = filtered.slice(0, limit);
   }
@@ -99,17 +83,16 @@ export default function Gallery({ limit = null }) {
   return (
     <div className="premium-gallery container">
 
-      {/* Tabs - HIDE when limit is active */}
+      {/* Tabs - shown only when limit is NOT applied */}
       {!limit && (
         <div className="filter-buttons d-inline-flex gap-3 flex-wrap pt-2 pb-5 align-items-center w-100 justify-content-center">
-          {tabs.map((tab) => (
+          {categories.map((cat, i) => (
             <button
-              key={tab}
-              className={`filter-btn ${activeTab === tab ? "filter-btn active" : "filter-btn"
-                }`}
-              onClick={() => setActiveTab(tab)}
+              key={i}
+              className={`filter-btn ${activeTab === cat ? "active" : ""}`}
+              onClick={() => setActiveTab(cat)}
             >
-              {tab}
+              {cat}
             </button>
           ))}
         </div>
@@ -120,7 +103,7 @@ export default function Gallery({ limit = null }) {
         {filtered.map((img, i) => (
           <div key={i} className="col-lg-4 col-md-6 mb-3 px-2 gallery-img-item">
             <img
-              src={img.thumb}
+              src={img.image}
               alt={img.alt}
               className="w-100 rounded shadow-sm hover-scale"
               onClick={() => openLightbox(i)}
@@ -200,20 +183,14 @@ export default function Gallery({ limit = null }) {
           from { opacity: 0; transform: translateY(10px); } 
           to { opacity: 1; transform: translateY(0); } 
         }
-
         .toolbar button { 
           background: transparent !important; 
           border: none !important; 
           color: #adadad !important;
           padding: 6px; 
         }
-
         .toolbar svg { width: 20px; height: 20px; }
-
-        .toolbar { 
-          right: 25px; 
-          top: 25px; 
-        }
+        .toolbar { right: 25px; top: 25px; }
       `}</style>
     </div>
   );
