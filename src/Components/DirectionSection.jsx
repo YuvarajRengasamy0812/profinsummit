@@ -42,46 +42,6 @@ const DirectionSection = () => {
                 </div>
               </div>
             </div>
-            {/* <div className="location-gallery">
-              <div id="selector" className="row pt-1 justify-content-center">
-                <div
-                  className="item col-lg-4 col-md-6 p-1"
-                  data-src="images/group/4.jpg"
-                >
-                  <a>
-                    <img
-                      src="assets/images/thumbnail/4.jpg"
-                      className="w-100 rounded"
-                      alt="VR Presentation and conference"
-                    />
-                  </a>
-                </div>
-                <div
-                  className="item col-lg-4 col-md-6 p-1"
-                  data-src="images/group/7.jpg"
-                >
-                  <a>
-                    <img
-                      src="assets/images/thumbnail/7.jpg"
-                      className="w-100 rounded"
-                      alt="VR Presentation and conference"
-                    />
-                  </a>
-                </div>
-                <div
-                  className="item col-lg-4 col-md-6 p-1"
-                  data-src="images/group/1.jpg"
-                >
-                  <a>
-                    <img
-                      src="assets/images/thumbnail/1.jpg"
-                      className="w-100 rounded"
-                      alt="VR Presentation and conference"
-                    />
-                  </a>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </section>
