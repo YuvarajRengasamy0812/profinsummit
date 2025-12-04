@@ -72,6 +72,8 @@ function App() {
           {/* <Route path="/Blogs" element={<Blogs />} /> */}
           <Route path="/Bloglists" element={<Bloglists />} />
           <Route path="/Blogsingle" element={<Blogsingle />} />
+          {/* <Route path="/Blogsingle/:id" element={<Blogsingle />} /> */}
+
           <Route path="/Exhibitors" element={<Exhibitors />} />
           {/* <Route path="/TopicPhotos" element={<TopicPhotos />} /> */}
 
