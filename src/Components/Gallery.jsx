@@ -8,43 +8,43 @@ import {
   Share2,
   X,
 } from "lucide-react";
-import { getAllGallery } from '../api/gallery';
+import { getAllGallery } from "../api/gallery";
 
-export default function Gallery({ limit = null }) { 
-  
+export default function Gallery({ limit = null }) {
   const [images, setImages] = useState([]);
   const [activeTab, setActiveTab] = useState("All");
-  const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [lightboxIndex, setLightboxIndex] = useState(null); // should be null initially
   const [zoom, setZoom] = useState(1);
+  const [filteredImages, setFilteredImages] = useState([]);
   const imgRef = useRef(null);
 
   useEffect(() => {
     getGalleryList();
-  }, [])
+  }, []);
+
+  useEffect(() => {
+    filterImages();
+  }, [images, activeTab, limit]);
 
   const getGalleryList = () => {
     getAllGallery()
-      .then((res) => {
-        setImages(res?.data?.items || []);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      .then((res) => setImages(res?.data?.items || []))
+      .catch((err) => console.log(err));
   };
 
-  // ⬅ UNIQUE CATEGORY LIST
+  const filterImages = () => {
+    let filtered =
+      activeTab === "All"
+        ? images
+        : images.filter((img) => img.category === activeTab);
+
+    if (limit) filtered = filtered.slice(0, limit);
+    setFilteredImages(filtered);
+  };
+
   const categories = ["All", ...new Set(images.map((img) => img.category))];
 
-  // FILTERED IMAGES
-  let filtered =
-    activeTab === "All"
-      ? images
-      : images.filter((img) => img.category === activeTab);
-
-  if (limit) {
-    filtered = filtered.slice(0, limit);
-  }
-
+  // Correct openLightbox function
   const openLightbox = (index) => {
     setLightboxIndex(index);
     setZoom(1);
@@ -53,37 +53,59 @@ export default function Gallery({ limit = null }) {
   const closeLightbox = () => setLightboxIndex(null);
 
   const prevImage = () => {
-    setLightboxIndex((prev) => (prev === 0 ? filtered.length - 1 : prev - 1));
+    setLightboxIndex((prev) =>
+      prev === 0 ? filteredImages.length - 1 : prev - 1
+    );
     setZoom(1);
   };
 
   const nextImage = () => {
     setLightboxIndex((prev) =>
-      prev === filtered.length - 1 ? 0 : prev + 1
+      prev === filteredImages.length - 1 ? 0 : prev + 1
     );
     setZoom(1);
   };
 
   const downloadImg = () => {
-    const link = document.createElement("a");
-    link.href = filtered[lightboxIndex].full;
-    link.download = "image.jpg";
-    link.click();
-  };
+  const imgUrl = filteredImages[lightboxIndex]?.full || filteredImages[lightboxIndex]?.image;
+  if (!imgUrl) return;
 
-  const shareImg = async () => {
-    if (navigator.share) {
+  const link = document.createElement("a");
+  link.href = imgUrl;
+  link.download = "image.jpg"; // may not work if cross-origin, browser may open in new tab instead
+  link.target = "_blank";      // open in new tab
+  link.click();
+};
+
+
+ const shareImg = async () => {
+  const url = filteredImages[lightboxIndex]?.full || filteredImages[lightboxIndex]?.image;
+  if (!url) return;
+
+  if (navigator.share) {
+    try {
       await navigator.share({
         title: "Gallery Image",
-        url: filtered[lightboxIndex].full,
+        url,
       });
+    } catch (err) {
+      console.error("Error sharing image:", err);
     }
-  };
+  } else {
+    // Fallback: copy URL to clipboard
+    try {
+      await navigator.clipboard.writeText(url);
+      alert("Image URL copied to clipboard!");
+    } catch {
+      alert("Sharing not supported on this device.");
+    }
+  }
+};
+
 
   return (
     <div className="premium-gallery container">
-
-      {/* Tabs - shown only when limit is NOT applied */}
+      {/* CATEGORY TABS */}
       {!limit && (
         <div className="filter-buttons d-inline-flex gap-3 flex-wrap pt-2 pb-5 align-items-center w-100 justify-content-center">
           {categories.map((cat, i) => (
@@ -98,28 +120,27 @@ export default function Gallery({ limit = null }) {
         </div>
       )}
 
-      {/* Gallery Grid */}
+      {/* GALLERY GRID */}
       <div className="row fade-animation">
-        {filtered.map((img, i) => (
+        {filteredImages.map((img, i) => (
           <div key={i} className="col-lg-4 col-md-6 mb-3 px-2 gallery-img-item">
             <img
               src={img.image}
               alt={img.alt}
               className="w-100 rounded shadow-sm hover-scale"
-              onClick={() => openLightbox(i)}
               style={{ cursor: "pointer" }}
+              onClick={() => openLightbox(i)} // pass index
             />
           </div>
         ))}
       </div>
 
-      {/* Lightbox */}
-      {lightboxIndex !== null && (
+      {/* LIGHTBOX */}
+      {lightboxIndex !== null && filteredImages[lightboxIndex] && (
         <div
           className="lightbox position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
           style={{ background: "rgba(0,0,0,0.85)", zIndex: 2000 }}
         >
-          {/* Left Arrow */}
           <button
             className="position-absolute start-0 bg-transparent border-0 text-white ms-3 p-0"
             style={{ left: 20, zIndex: 2 }}
@@ -128,11 +149,10 @@ export default function Gallery({ limit = null }) {
             <ChevronLeft size={40} />
           </button>
 
-          {/* Image */}
           <img
             ref={imgRef}
-            src={filtered[lightboxIndex].full}
-            alt="full"
+            src={filteredImages[lightboxIndex]?.full || filteredImages[lightboxIndex]?.image}
+            alt={filteredImages[lightboxIndex]?.alt || "image"}
             style={{
               maxWidth: "90%",
               maxHeight: "90%",
@@ -142,7 +162,7 @@ export default function Gallery({ limit = null }) {
             draggable
           />
 
-          {/* Right Arrow */}
+
           <button
             className="position-absolute end-0 bg-transparent border-0 text-white me-3 p-0"
             style={{ right: 20 }}
@@ -151,7 +171,6 @@ export default function Gallery({ limit = null }) {
             <ChevronRight size={40} />
           </button>
 
-          {/* Toolbar */}
           <div className="toolbar position-absolute d-flex gap-2">
             <button className="btn btn-light" onClick={() => setZoom((z) => z + 0.2)}>
               <ZoomIn />
@@ -175,7 +194,6 @@ export default function Gallery({ limit = null }) {
         </div>
       )}
 
-      {/* CSS */}
       <style>{`
         .hover-scale:hover { transform: scale(1.03); transition: 0.3s; }
         .fade-animation { animation: fadeIn 0.4s ease-in-out; }
@@ -183,12 +201,7 @@ export default function Gallery({ limit = null }) {
           from { opacity: 0; transform: translateY(10px); } 
           to { opacity: 1; transform: translateY(0); } 
         }
-        .toolbar button { 
-          background: transparent !important; 
-          border: none !important; 
-          color: #adadad !important;
-          padding: 6px; 
-        }
+        .toolbar button { background: transparent !important; border: none !important; color: #adadad !important; padding: 6px; }
         .toolbar svg { width: 20px; height: 20px; }
         .toolbar { right: 25px; top: 25px; }
       `}</style>
