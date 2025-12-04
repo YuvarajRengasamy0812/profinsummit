@@ -13,6 +13,7 @@ import SchedulesSection from "../Components/SchedulesSection";
 import TicketSection from "../Components/TicketSection";
 import LetsDoIt from "../Components/LetsDoIt";
 import BlogSection from "../Components/BlogSection";
+import MediaPartners from "../Components/MediaPartners";
 function Home() {
   return (
     <div style={{overflowX:"hidden"}}>
@@ -265,120 +266,7 @@ function Home() {
 
 
       {/*--Partners Section start--*/}
-      {/* <section className="partners">
-        <div className="container">
-          <div className="partner-inner">
-            <div className="partner-title text-center pb-6 w-lg-60 m-auto">
-              <p className="mb-1 pink">OUR PARTNERS</p>
-              <h2 className="mb-1">
-                RECENT SPONSERS AND <span className="pink">PARTNERS</span>
-              </h2>
-              <p className="m-0">
-                We are grateful for the support of our sponsors and partners.
-              </p>
-            </div>
-            <div className="partner-img pb-6">
-              <div className="row row-cols-1 row-cols-lg-5 row-cols-md-5 ">
-                <div className="col p-0 border-end border-sm-0">
-                  <div className="p-2 partner-img-box text-center">
-                    <img
-                      src="assets/images/icon/1.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-end border-sm-0">
-                  <div className="p-2 partner-img-box text-center ">
-                    <img
-                      src="assets/images/icon/2.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-end border-sm-0">
-                  <div className="p-2 partner-img-box text-center">
-                    <img
-                      src="assets/images/icon/3.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-end border-sm-0">
-                  <div className="p-2 partner-img-box text-center">
-                    <img
-                      src="assets/images/icon/4.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-sm-0">
-                  <div className="p-2 partner-img-box text-center">
-                    <img
-                      src="assets/images/icon/5.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-end border-top border-sm-0">
-                  <div className="p-2 partner-img-box text-center">
-                    <img
-                      src="assets/images/icon/3.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-end border-top border-sm-0">
-                  <div className="p-2 partner-img-box text-center">
-                    <img
-                      src="assets/images/icon/4.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-end border-top border-sm-0">
-                  <div className="p-2 partner-img-box text-center ">
-                    <img
-                      src="assets/images/icon/5.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-end border-top border-sm-0">
-                  <div className="p-2 partner-img-box text-center ">
-                    <img
-                      src="assets/images/icon/1.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-                <div className="col p-0 border-top border-0 border-sm-0">
-                  <div className="p-2 partner-img-box text-center border-sm-0">
-                    <img
-                      src="assets/images/icon/2.png"
-                      alt="partner-img"
-                      className="opacity-75 w-lg-75 w-md-100 w-40"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="partner-button text-center">
-              <Link to="/Sponsers" className="btn">
-                VIEW MORE SPONSERS
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section> */}
+      <MediaPartners />
       {/*--Partners Section end--*/}
 
       {/*--Features Section start--*/}
