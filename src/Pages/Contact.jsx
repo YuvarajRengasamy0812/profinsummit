@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../Components/Breadcrumb";
 import Pagehelmet from "../Components/Pagehelmet";
 import Contactform from "../Components/Contactform";
+import axios from "axios";
 
 function Contact() {
+  const [directionLink, setDirectionLink] = useState(""); // store the Google Maps link
+    const [loading, setLoading] = useState(true);
+  
+    useEffect(() => {
+      // Fetch topic data for map direction
+      axios
+        .get("https://staging.profinsummit.com/adminpanel/api/v1/topic/126")
+        .then((res) => {
+          if (res.data.topic && res.data.topic.length) {
+            setDirectionLink(res.data.topic[0].details); // get the embed link
+          }
+        })
+        .catch((err) => console.error("Error fetching direction:", err))
+        .finally(() => setLoading(false));
+    }, []);
+  
+    if (loading) {
+      return <p className="text-center py-5">Loading map...</p>;
+    }
+    
   return (
     <div>
       <Pagehelmet pageTitle="Contact Us" />
@@ -58,11 +79,16 @@ function Contact() {
               </div>
             </div>
             <div className="map-direction mt-5">
-              <iframe
-                height="400"
-                className="rounded w-100"
-                src="https://maps.google.com/maps?width=100%25&height=600&hl=en&q=Yashobhoomi%20Convention%20Centre%20Sector%2025%20Dwarka%20Delhi%20110077%20India&t=&z=15&ie=UTF8&iwloc=B&output=embed"
-              ></iframe>
+              {directionLink ? (
+                  <iframe
+                    height="400"
+                    className="rounded w-100"
+                    src={directionLink}
+                    title="Event Direction Map"
+                  ></iframe>
+                ) : (
+                  <p>Map not available</p>
+                )}
             </div>
           </div>
         </div>

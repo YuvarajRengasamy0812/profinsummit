@@ -21,7 +21,7 @@ const AboutSection = () => {
               </p>
 
               <a
-                href="/assets/brochure/profin-blockchain-brochure.pdf"
+                href="assets/brochure/ProFin Blockchain Summit 2026 - Event Brochure.pdf"
                 target="_blank"
                 className="btn btn-download d-inline-flex align-items-center px-4 py-2 rounded-pill"
               >
