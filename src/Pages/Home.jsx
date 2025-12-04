@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import CountUpBox from "../Components/CountUpBox";
 import TestimonialSlider from "../Components/TestimonialSlider ";
 import Gallery from "../Components/Gallery";
@@ -14,7 +15,24 @@ import TicketSection from "../Components/TicketSection";
 import LetsDoIt from "../Components/LetsDoIt";
 import BlogSection from "../Components/BlogSection";
 import MediaPartners from "../Components/MediaPartners";
+
+import { getBrochure } from "../api/brochure";
 function Home() {
+  const [brochure, setBrochure] = useState([]);
+  
+    useEffect(() => {
+      getSocialList();
+    }, [])
+  
+    const getSocialList = () => {
+      getBrochure()
+        .then((res) => {
+          setBrochure(res?.data?.topics);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
   return (
     <div style={{overflowX:"hidden"}}>
       {/*!-- Bannner section starts --*/}
@@ -103,17 +121,19 @@ function Home() {
                             SECURE EARLY BIRD TICKETS
                           </Link>
                         </div>
+                        {brochure.map((item) => (
                         <div className="col-lg-6 col-md-6"
                           data-aos="fade-up"
-                          data-aos-delay="850">
+                          data-aos-delay="850" key={item.id}>
                           <a
-                            href="/assets/brochure/ProFin Blockchain Summit 2026 - Event Brochure.pdf"
+                            href={item?.attach_file}
                             target="_blank"
                             className="btn btn2 my-1 w-100"
                           >
                             Download Event Brochure
                           </a>
                         </div>
+                        ))}
                       </div>
                     </div>
                   </div>

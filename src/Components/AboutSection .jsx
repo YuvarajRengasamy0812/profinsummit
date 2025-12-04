@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FileText } from "lucide-react";
+import { getBrochure } from "../api/brochure";
 
 const AboutSection = () => {
+  const [brochure, setBrochure] = useState([]);
+
+  useEffect(() => {
+    getSocialList();
+  }, [])
+
+  const getSocialList = () => {
+    getBrochure()
+      .then((res) => {
+        setBrochure(res?.data?.topics);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <section className="about-section py-5 position-relative mt-5">
       <div className="container">
         <div className="row align-items-center">
           {/* Left Text Content */}
-          <div className="col-lg-6">
+          {brochure.map((item) => (
+          <div className="col-lg-6" key={item.id}>
             <div className="about-text mb-4 mb-lg-0">
               <p className="small pink mb-2">ABOUT PROFIN BLOCKCHAIN SUMMIT</p>
               <h2 className="mb-3">
@@ -21,7 +39,7 @@ const AboutSection = () => {
               </p>
 
               <a
-                href="assets/brochure/ProFin Blockchain Summit 2026 - Event Brochure.pdf"
+                href={item?.attach_file}
                 target="_blank"
                 className="btn btn-download d-inline-flex align-items-center px-4 py-2 rounded-pill"
               >
@@ -30,6 +48,7 @@ const AboutSection = () => {
               </a>
             </div>
           </div>
+          ))}
 
           {/* Right Visual / Illustration */}
           <div className="col-lg-6">
