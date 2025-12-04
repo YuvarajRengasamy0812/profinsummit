@@ -11,48 +11,48 @@ import { getAllLog } from '../api/style';
 
 const Header = () => {
 
-    const [social, setSocial] = useState([]);
-    const [topbar, setTopBar] = useState([]);
-    const [logo, setLogo] = useState([]);
+  const [social, setSocial] = useState([]);
+  const [topbar, setTopBar] = useState([]);
+  const [logo, setLogo] = useState([]);
 
+  useEffect(() => {
+    getSocialList();
+    getTopBarList();
+    getLogo();
 
-          useEffect(() => {
-            getSocialList();
-            getTopBarList();
-            getLogo();
-           
-        }, [])
-    
-         const getSocialList = () => {
-            getAllSocial()
-                .then((res) => {
-                  
-                    setSocial(res?.data?.details);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        };
-         const getTopBarList = () => {
-            getAllTopBar()
-                .then((res) => {
-                
-                    setTopBar(res?.data?.details);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        };
-         const getLogo = () => {
-            getAllLog()
-                .then((res) => {
-                console.log("logos")
-                    setLogo(res?.data?.details);
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        };
+  }, [])
+
+  const getSocialList = () => {
+    getAllSocial()
+      .then((res) => {
+
+        setSocial(res?.data?.details);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  
+  const getTopBarList = () => {
+    getAllTopBar()
+      .then((res) => {
+
+        setTopBar(res?.data?.details);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const getLogo = () => {
+    getAllLog()
+      .then((res) => {
+        console.log("logos")
+        setLogo(res?.data?.details);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <header className="main_header_area position-absolute w-100 site-header">
       {/* Top bar with social and contact info */}
@@ -80,40 +80,40 @@ const Header = () => {
                     ))}
                   </ul> */}
                   <ul className="m-0 p-0 d-flex gap-2">
-                  {[
-                    {
-                      icon: "facebook",
-                     url: social.facebook || "#",
-                    },
-                    {
-                      icon: "twitter",
-                      url: social.twitter || "#",
-                    },
-                    {
-                      icon: "instagram",
-                      url:social.instagram || "#",
-                    },
-                    {
-                      icon: "youtube",
-                      url: social.youtube || "#",
-                    },
-                    {
-                      icon: "linkedin",
-                      url:social.linkedin || "#",
-                    },
-                  ].map((item, i) => (
-                    <li key={i} className="d-inline">
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="d-inline-block rounded-circle bg-white  bg-opacity-25 social-url"
-                      >
-                        <i className={`fa fa-${item.icon} border-social rounded-circle text-center`}></i>
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+                    {[
+                      {
+                        icon: "facebook",
+                        url: social.facebook || "#",
+                      },
+                      {
+                        icon: "twitter",
+                        url: social.twitter || "#",
+                      },
+                      {
+                        icon: "instagram",
+                        url: social.instagram || "#",
+                      },
+                      {
+                        icon: "youtube",
+                        url: social.youtube || "#",
+                      },
+                      {
+                        icon: "linkedin",
+                        url: social.linkedin || "#",
+                      },
+                    ].map((item, i) => (
+                      <li key={i} className="d-inline">
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="d-inline-block rounded-circle bg-white  bg-opacity-25 social-url"
+                        >
+                          <i className={`fa fa-${item.icon} border-social rounded-circle text-center`}></i>
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </div>
 
@@ -152,7 +152,7 @@ const Header = () => {
                       src={logo.logo}
                       alt="Logo"
                       className=""
-                      style={{maxWidth:"155px"}}
+                      style={{ maxWidth: "155px" }}
                     />
                   </Link>
                 </div>
@@ -165,7 +165,7 @@ const Header = () => {
 
               <div className="col-lg-3 d-none d-lg-block">
                 <div className="menu-search">
-                  <Search className="d-md-none"/>
+                  <Search className="d-md-none" />
                   <Link to="/Booknow" className="btn btn3">
                     Buy Ticket <i className="fa fa-long-arrow-right ms-4"></i>
                   </Link>

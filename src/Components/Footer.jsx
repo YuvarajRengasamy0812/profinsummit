@@ -23,8 +23,8 @@ function Footer() {
   const getSocialList = () => {
     getAllSocial()
       .then((res) => {
-        console.log(res, "yuvi")
-        setSocial(res?.data);
+        console.log(res, "social")
+        setSocial(res?.data?.details);
       })
       .catch((err) => {
         console.log(err);
@@ -66,8 +66,6 @@ function Footer() {
       })
       .catch((err) => console.log(err));
   };
-
-
 
   return (
     <div>
