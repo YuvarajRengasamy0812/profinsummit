@@ -46,7 +46,7 @@ const Header = () => {
   const getLogo = () => {
     getAllLog()
       .then((res) => {
-        console.log("logos")
+    
         setLogo(res?.data?.details);
       })
       .catch((err) => {

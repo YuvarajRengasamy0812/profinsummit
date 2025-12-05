@@ -24,7 +24,7 @@ function Footer() {
   const getSocialList = () => {
     getAllSocial()
       .then((res) => {
-        console.log(res, "social")
+       
         setSocial(res?.data?.details);
       })
       .catch((err) => {
@@ -35,7 +35,7 @@ function Footer() {
   const getLogo = () => {
     getAllLog()
       .then((res) => {
-        console.log("logos")
+       
         setLogo(res?.data?.details);
       })
       .catch((err) => {
