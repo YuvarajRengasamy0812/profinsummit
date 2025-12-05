@@ -9,6 +9,7 @@ import { getAllSocial } from '../api/socialmedia';
 import { getAllLog } from '../api/style';
 
 
+
 function Footer() {
   const [social, setSocial] = useState([]);
   const [footerLinks, setFooterLinks] = useState([]);

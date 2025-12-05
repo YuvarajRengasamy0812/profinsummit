@@ -8,3 +8,5 @@ export const contactform ='contact'
 export const subscribeform ='subscribe'
 export const mediapartners ='topics/17/page/1/count/10/en'
 export const brochure ='topics/18/page/1/count/10/en'
+export const Countdown ='topics/19/page/1/count/10/en'
+
