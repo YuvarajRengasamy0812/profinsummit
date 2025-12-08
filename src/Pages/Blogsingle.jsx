@@ -54,9 +54,9 @@ function Blogsingle() {
                     <h4 className="mb-4">{blogData.title}</h4>
                     <p>{blogData.subheading}</p>
                     <div dangerouslySetInnerHTML={{ __html: blogData.details }} />
-                    <p className="d-flex align-items-center mb-4 gap-3">
+                    {/* <p className="d-flex align-items-center mb-4 gap-3">
                       <BadgeCheck className="pink" /> <strong className="pink">Author: {blogData.author}</strong>
-                    </p>
+                    </p> */}
                   </div>
 
                   <div className="qoutation p-4 bg-lightgrey rounded d-flex align-items-center mb-4 text-center text-md-start">
@@ -109,7 +109,7 @@ function Blogsingle() {
                       <img src="assets/images/blogs/organiser.jpeg" alt="Organizer" className="rounded-circle mb-3" />
                     </div>
                     <div className="organizer-bio pb-5 mb-4 border-bottom border-2 border-grey border-opacity-25 border-bottom-dashed">
-                      <h6 className="mb-1">Hi, {blogData.author}</h6>
+                      <h6 className="mb-1">{blogData.author}</h6>
                       <p className="mb-0 w-80 m-auto">
                         <small>
                           {blogData.author} is a blockchain enthusiast and organizer of the ProFin Blockchain
