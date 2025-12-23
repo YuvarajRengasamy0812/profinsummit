@@ -64,11 +64,12 @@ const Exhibitors = () => {
         </section>
         {/* -- Floor Plan Section End -- */}
 
-        {/* <FloorPlan /> */}
 
         {/* <BoothSpectrum /> */}
         <TicketSection />
         
+        <FloorPlan />
+
         {/* -- Exhibitor Success Path Section Start -- */}
         <section className="exhibitor-success py-10 py-md-14">
           <div className="container">
