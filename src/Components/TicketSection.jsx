@@ -1,8 +1,11 @@
-import { BadgeCheck, OctagonX } from "lucide-react";
-import React from "react";
-import { Link } from "react-router-dom";
-
+// import { BadgeCheck, OctagonX } from "lucide-react";
+// import React from "react";
+import { useState } from "react";
+// import { Link } from "react-router-dom";
+import TicketBookingModal from "./TicketBookingModal";
 const TicketSection = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useState(null);
   return (
     <>
       <section className="price bg-lightgrey">
@@ -24,7 +27,7 @@ const TicketSection = () => {
               <div className="row row-cols-1 row-cols-md-2 row-cols-lg-5 g-4">
                 {/* General Tier */}
                 <div className="">
-                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
+                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{ height: "100%" }}>
                     <img
                       src="assets/images/pattern/1.png"
                       alt="pattern"
@@ -54,10 +57,10 @@ const TicketSection = () => {
                           </small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
-                            <small>Main Conference Access</small>
+                          <small>Main Conference Access</small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
-                          <small>Workshops (Limited Seats)</small> 
+                          <small>Workshops (Limited Seats)</small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
                           <small>Coffee/Tea Breaks</small>
@@ -76,16 +79,29 @@ const TicketSection = () => {
                     </div>
 
                     <div className="ticket-button mt-auto p-6">
-                      <Link to="/Pricing" className="btn">
+                      {/* <Link to="/Pricing" className="btn">
                         BUY NOW
-                      </Link>
+                      </Link> */}
+                      <button
+                        className="btn"
+                        onClick={() => {
+                          setSelectedTicket({
+                            name: "GENERAL PASS",
+                            price: 1999,
+                            colorClass: "pink",
+                          });
+                          setShowModal(true);
+                        }}
+                      >
+                        BUY NOW
+                      </button>
                     </div>
                   </div>
                 </div>
 
                 {/* Premium Tier */}
                 <div className="">
-                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
+                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{ height: "100%" }}>
                     <img
                       src="assets/images/pattern/2.png"
                       alt="pattern"
@@ -139,16 +155,30 @@ const TicketSection = () => {
                     </div>
 
                     <div className="partner-button mt-auto p-6">
-                      <Link to="/Pricing" className="btn" style={{background:"#ae4b84"}}>
+                      {/* <Link to="/Pricing" className="btn" style={{ background: "#ae4b84" }}>
                         BUY NOW
-                      </Link>
+                      </Link> */}
+                      <button
+                        style={{ background: "#ae4b84" }}
+                        className="btn"
+                        onClick={() => {
+                          setSelectedTicket({
+                            name: "PREMIUM PASS",
+                            price: 3499,
+                            colorClass: "pink",
+                          });
+                          setShowModal(true);
+                        }}
+                      >
+                        BUY NOW
+                      </button>
                     </div>
                   </div>
                 </div>
 
                 {/* Business Tier */}
                 <div className="">
-                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
+                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{ height: "100%" }}>
                     <img
                       src="assets/images/pattern/5.png"
                       alt="pattern"
@@ -178,7 +208,7 @@ const TicketSection = () => {
                           </small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
-                            <small>Reserved Business Seating</small>
+                          <small>Reserved Business Seating</small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
                           <small>Business Networking Zone</small>
@@ -206,16 +236,30 @@ const TicketSection = () => {
                     </div>
 
                     <div className="partner-button mt-auto p-5">
-                      <Link to="/Pricing" className="btn" style={{background:"#393182"}}>
+                      {/* <Link to="/Pricing" className="btn" style={{ background: "#393182" }}>
                         BUY NOW
-                      </Link>
+                      </Link> */}
+                      <button
+                        style={{ background: "#393182" }}
+                        className="btn"
+                        onClick={() => {
+                          setSelectedTicket({
+                            name: "BUSINESS PASS",
+                            price: 9999,
+                            colorClass: "pink",
+                          });
+                          setShowModal(true);
+                        }}
+                      >
+                        BUY NOW
+                      </button>
                     </div>
                   </div>
                 </div>
 
                 {/* VIP Tier */}
                 <div className="">
-                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
+                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{ height: "100%" }}>
                     <img
                       src="assets/images/pattern/4.png"
                       alt="pattern"
@@ -245,7 +289,7 @@ const TicketSection = () => {
                           </small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
-                            <small>Front-Row VIP Seating</small>
+                          <small>Front-Row VIP Seating</small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
                           <small>VIP Lounge Access</small>
@@ -269,16 +313,30 @@ const TicketSection = () => {
                     </div>
 
                     <div className="partner-button mt-auto p-5">
-                      <Link to="/Pricing" className="btn" style={{background:"#d7b56b"}}>
+                      {/* <Link to="/Pricing" className="btn" style={{ background: "#d7b56b" }}>
                         BUY NOW
-                      </Link>
+                      </Link> */}
+                      <button
+                        style={{ background: "#d7b56b" }}
+                        className="btn"
+                        onClick={() => {
+                          setSelectedTicket({
+                            name: "VIP PASS",
+                            price: 24999,
+                            colorClass: "pink",
+                          });
+                          setShowModal(true);
+                        }}
+                      >
+                        BUY NOW
+                      </button>
                     </div>
                   </div>
                 </div>
 
                 {/* Student Tier */}
                 <div className="">
-                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{height:"100%"}}>
+                  <div className="ticket-box-inner bg-white position-relative rounded-bottom-5 d-flex flex-column" style={{ height: "100%" }}>
                     <img
                       src="assets/images/pattern/6.png"
                       alt="pattern"
@@ -308,7 +366,7 @@ const TicketSection = () => {
                           </small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
-                            <small>Selected Workshops</small>
+                          <small>Selected Workshops</small>
                         </li>
                         <li className="py-2 border-dashed-bottom-1">
                           <small>Coffee/Tea Breaks</small>
@@ -326,9 +384,23 @@ const TicketSection = () => {
                     </div>
 
                     <div className="partner-button mt-auto p-5">
-                      <Link to="/Pricing" className="btn" style={{background:"#dc6601"}}>
+                      {/* <Link to="/Pricing" className="btn" style={{ background: "#dc6601" }}>
                         BUY NOW
-                      </Link>
+                      </Link> */}
+                      <button
+                        style={{ background: "#dc6601" }}
+                        className="btn"
+                        onClick={() => {
+                          setSelectedTicket({
+                            name: "STUDENT PASS",
+                            price: 999,
+                            colorClass: "pink",
+                          });
+                          setShowModal(true);
+                        }}
+                      >
+                        BUY NOW
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -344,6 +416,13 @@ const TicketSection = () => {
           </div>
         </div>
       </section>
+      {showModal && selectedTicket && (
+        <TicketBookingModal
+          ticket={selectedTicket}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+
     </>
   );
 };
