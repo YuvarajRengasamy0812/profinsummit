@@ -28,6 +28,10 @@ import Exhibitors from "./Pages/Exhibitors";
 
 import "aos/dist/aos.css";
 import Aos from "aos";
+import Login from "./Pages/Login";
+import Register from "./Pages/Register";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 function App() {
   const location = useLocation();
   const hideHeaderFooter = location.pathname === "/Comingsoon";
@@ -51,6 +55,10 @@ function App() {
       <div>
         {!hideHeaderFooter && <Header />}
         <Routes>
+          <Route path="/Login" element={<Login />} />
+          <Route path="/Register" element={<Register />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/ResetPassword" element={<ResetPassword />} />
           <Route path="/" element={<Home />} />
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
