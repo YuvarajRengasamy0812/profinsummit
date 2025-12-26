@@ -1,11 +1,12 @@
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 const TicketBookingModal = ({ ticket, onClose }) => {
   const [step, setStep] = useState(1);
   const [persons, setPersons] = useState(1);
+  const [user, setUser] = useState(null);
   const [visitors, setVisitors] = useState([{ name: "", email: "", phone: "", idType: "", idNumber: "" }]);
   const [paymentMethod, setPaymentMethod] = useState(null);
   const [amount, setAmount] = useState(null);
@@ -75,8 +76,9 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     const formData = new FormData();
     formData.append("api_key", "402784613679330");
     formData.append("ticket_type", ticket.name);
+        formData.append("user_id", user.id);
     formData.append("payment_type", paymentMethod);
-    formData.append("amount", amount);
+    formData.append("amount", total);
     formData.append("refer_count", persons);
     formData.append("refer_code", code);
     formData.append("payment_image", paymentImage);
@@ -85,7 +87,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
       formData.append(`tickets[${i}][name]`, v.name);
       formData.append(`tickets[${i}][email]`, v.email);
       formData.append(`tickets[${i}][phone]`, v.phone);
-      formData.append(`tickets[${i}][id]`, `user${i + 1}`);
+      formData.append(`tickets[${i}][id]`, user.id); // temporary user_id
       formData.append(`tickets[${i}][id_name]`, v.idType);
       formData.append(`tickets[${i}][id_number]`, v.idNumber);
     });
@@ -131,7 +133,17 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     }
   };
 
-  // Close modal on ESC key
+  
+
+   // Load user from localStorage
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  // Handle Escape key
   useEffect(() => {
     const handleEsc = (event) => {
       if (event.key === "Escape") {
@@ -140,7 +152,6 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     };
 
     window.addEventListener("keydown", handleEsc);
-
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
@@ -425,7 +436,7 @@ const validateStep = () => {
                     <label htmlFor="total">
                       Amount to be Paid
                     </label>
-                    <input className="" type="text" placeholder="Paid Amount" value={total} disabled onChange={(e) => setAmount(e.target.value)} />
+                    <input className="" type="text" placeholder="Paid Amount" value={total} disabled />
                     <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])} />
                     {/* <button className="btn bg-pink text-white">Submit</button> */}
                   </div>
@@ -465,7 +476,7 @@ const validateStep = () => {
                     <label htmlFor="total">
                       Amount to be Paid
                     </label>
-                    <input type="text" className="text-start" value={total} disabled onChange={(e) => setAmount(e.target.value)} placeholder="Paid Amount" />
+                    <input type="text" className="text-start" value={total} disabled  placeholder="Paid Amount" />
                     <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])} />
 
                   </div>
@@ -503,7 +514,6 @@ const validateStep = () => {
                       type="text"
                       value={total}
                       disabled
-                      onChange={(e) => setAmount(e.target.value)}
                       placeholder="Paid Amount"
                       className="form-input border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-pink"
                     />
