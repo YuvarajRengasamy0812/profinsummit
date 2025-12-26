@@ -48,7 +48,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     formData.append("ticket_type", ticket.name);
         formData.append("user_id", user.id);
     formData.append("payment_type", paymentMethod);
-    formData.append("amount",amount );
+    formData.append("amount",total );
 formData.append("refer_count",persons );
 formData.append("refer_code",code );
     // Attach payment image
