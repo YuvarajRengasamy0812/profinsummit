@@ -1,9 +1,10 @@
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { useEffect, useState } from "react";
 import axios from "axios";
 const TicketBookingModal = ({ ticket, onClose }) => {
   const [step, setStep] = useState(1);
   const [persons, setPersons] = useState(1);
+  const [user, setUser] = useState(null);
   const [visitors, setVisitors] = useState([{ name: "", email: "", phone: "", idType: "", idNumber: "" }]);
   const [paymentMethod, setPaymentMethod] = useState(null);
     const [amount,setAmount]=useState(null);
@@ -12,6 +13,8 @@ const TicketBookingModal = ({ ticket, onClose }) => {
   const subtotal = ticket.price * persons;
   const taxAmt = subtotal * 0.18;
   const total = subtotal + taxAmt;
+
+
 
   const handlePersonsChange = (value) => {
     const count = Number(value);
@@ -33,7 +36,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     updated[index][field] = value;
     setVisitors(updated);
   };
-
+  
    const handleSubmit = async () => {
     if (!paymentMethod || !paymentImage) {
       alert("Payment method and payment screenshot are required!");
@@ -43,6 +46,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     const formData = new FormData();
     formData.append("api_key", "402784613679330");
     formData.append("ticket_type", ticket.name);
+        formData.append("user_id", user.id);
     formData.append("payment_type", paymentMethod);
     formData.append("amount",amount );
 formData.append("refer_count",persons );
@@ -56,7 +60,7 @@ formData.append("refer_code",code );
       formData.append(`tickets[${i}][name]`, v.name);
       formData.append(`tickets[${i}][email]`, v.email);
       formData.append(`tickets[${i}][phone]`, v.phone);
-      formData.append(`tickets[${i}][id]`, `user${i+1}`); // temporary user_id
+      formData.append(`tickets[${i}][id]`, user.id); // temporary user_id
       formData.append(`tickets[${i}][id_name]`, v.idType);
       formData.append(`tickets[${i}][id_number]`, v.idNumber);
     });
@@ -79,6 +83,18 @@ formData.append("refer_code",code );
       alert("Error submitting ticket!");
     }
   };
+
+  
+
+   // Load user from localStorage
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  // Handle Escape key
   useEffect(() => {
     const handleEsc = (event) => {
       if (event.key === "Escape") {
@@ -87,11 +103,21 @@ formData.append("refer_code",code );
     };
 
     window.addEventListener("keydown", handleEsc);
-
     return () => {
       window.removeEventListener("keydown", handleEsc);
     };
   }, [onClose]);
+
+  // Early return if user is not loaded yet
+  if (!user) {
+    return (
+      <div className="container-fluid bg-lightgrey py-6 min-vh-100">
+        <div className="container">
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="custom-modal-overlay">

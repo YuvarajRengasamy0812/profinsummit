@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PageHelmet from "../Components/Pagehelmet";
 import Breadcrumb from "../Components/Breadcrumb";
 import { Camera, Ticket, User } from "lucide-react";
@@ -9,6 +9,8 @@ const Profile = () => {
     const [activeTab, setActiveTab] = useState("profile");
     const [showTicketModal, setShowTicketModal] = useState(false);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const [user, setUser] = useState(null);
+
     const tickets = [
         {
             name: "GENERAL PASS",
@@ -22,6 +24,24 @@ const Profile = () => {
         },
     ];
 
+    useEffect(() => {
+        // Get user data from localStorage after login
+        const userData = localStorage.getItem("user");
+        if (userData) {
+            setUser(JSON.parse(userData));
+        }
+    }, []);
+
+    // Early return if user is not loaded
+    if (!user) {
+        return (
+            <div className="container-fluid bg-lightgrey py-6 min-vh-100">
+                <div className="container">
+                    <p>Loading profile...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <>
@@ -55,10 +75,10 @@ const Profile = () => {
                             />
                         </div>
                         <div>
-                            <h4 className="mb-1">Ragnar Lothbrok</h4>
-                            <p className="text-grey mb-1">user@site.com</p>
+                            <h4 className="mb-1">{user.full_name}</h4>
+                            <p className="text-grey mb-1">{user.email}</p>
                             <span className="badge border border-pink pink">
-                                Exhibitor
+                                {user.user_type}
                             </span>
                         </div>
                     </div>
@@ -96,29 +116,42 @@ const Profile = () => {
 
                                     <div className="row g-3">
                                         <div className="col-md-6">
-                                            <input className="form-control" placeholder="Full Name" />
+                                            <input
+                                                type="text"
+                                                placeholder="Full Name"
+                                                defaultValue={user.full_name}
+                                                 disabled
+                                            />
                                         </div>
                                         <div className="col-md-6">
-                                            <input className="form-control" placeholder="Email" disabled />
+                                            <input
+                                                type="email"
+                                                placeholder="Email"
+                                                defaultValue={user.email}
+                                                disabled
+                                            />
                                         </div>
                                         <div className="col-md-6">
-                                            <input className="form-control" placeholder="Company Name" />
+                                            <input type="text" placeholder="Company Name"defaultValue={user.company_name}  disabled />
                                         </div>
                                         <div className="col-md-6">
-                                            <input className="form-control" placeholder="Phone" />
+                                            <input type="text" placeholder="Phone" defaultValue={user.phone}  disabled/>
                                         </div>
                                         <div className="col-md-6">
-                                            <input className="form-control" placeholder="Nationality" />
+                                            <input type="text" placeholder="Nationality"defaultValue={user.nationality}  disabled />
+                                        </div>
+                                        <div className="col-md-6">
+                                            <input type="text" placeholder="Nationality"defaultValue={user.sponsor_package}  disabled />
                                         </div>
                                         <div className="col-12">
-                                            <textarea className="form-control" rows="3" placeholder="Special Requirements" />
+                                            <textarea type="text" rows="3" placeholder="Special Requirements"defaultValue={user.special_requirements}  disabled />
                                         </div>
 
-                                        <div className="col-12">
+                                        {/* <div className="col-12">
                                             <button className="btn bg-pink text-white">
                                                 Save Changes
                                             </button>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             )}
@@ -127,23 +160,16 @@ const Profile = () => {
                             {activeTab === "tickets" && (
                                 <div className="bg-white rounded shadow p-4">
                                     <h5 className="pink mb-3">My Tickets</h5>
-                                    {activeTab === "tickets" && (
-                                        <div className="bg-white rounded shadow p-4">
-                                            {/* <h5 className="pink mb-3">My Tickets</h5> */}
-
-                                            {tickets.map((ticket, index) => (
-                                                <TicketCard
-                                                    key={index}
-                                                    ticket={ticket}
-                                                    onView={() => {
-                                                        setSelectedTicket(ticket);
-                                                        setShowTicketModal(true);
-                                                    }}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
-
+                                    {tickets.map((ticket, index) => (
+                                        <TicketCard
+                                            key={index}
+                                            ticket={ticket}
+                                            onView={() => {
+                                                setSelectedTicket(ticket);
+                                                setShowTicketModal(true);
+                                            }}
+                                        />
+                                    ))}
                                 </div>
                             )}
 
@@ -151,13 +177,13 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+
             {showTicketModal && selectedTicket && (
                 <TicketModal
                     ticket={selectedTicket}
                     onClose={() => setShowTicketModal(false)}
                 />
             )}
-
         </>
     );
 };

@@ -18,10 +18,22 @@ const ProfileDropdown = ({ user }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleLogout = () => {
-    // Clear auth tokens if needed
-    navigate("/login");
-  };
+ const handleLogout = () => {
+  // Clear all relevant localStorage items
+  localStorage.removeItem("user");              // user info
+  localStorage.removeItem("token");             // auth token
+  localStorage.removeItem("loginType");         // optional if stored
+  localStorage.removeItem("masterId");         // optional if stored
+  localStorage.removeItem("rzp_checkout_anon_id"); // optional if stored
+  localStorage.removeItem("rzp_device_id");     // optional if stored
+
+  // Optionally, you can clear all localStorage
+  // localStorage.clear();
+
+  // Navigate to login page
+  navigate("/login");
+};
+
 
   return (
     <div

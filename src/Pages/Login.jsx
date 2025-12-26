@@ -48,7 +48,7 @@ const Login = () => {
         });
 
         // ✅ Redirect after alert
-        navigate("/"); // Change to your page route
+        navigate("/MyProfile"); // Change to your page route
       } else {
         Swal.fire({
           icon: "error",
