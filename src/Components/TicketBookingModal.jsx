@@ -63,7 +63,7 @@ formData.append("refer_code",code );
 
     try {
       const response = await axios.post(
-        "http://localhost/profinsummit/api/v1/ticket-submit",
+        "https://staging.profinsummit.com/adminpanel/api/v1/ticket-submit",
         formData,
         {
           headers: {

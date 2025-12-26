@@ -39,7 +39,7 @@ const Register = () => {
 
     try {
     const res = await axios.post(
-  "http://localhost/profinsummit/api/v1/register",
+  "https://staging.profinsummit.com/adminpanel/api/v1/register",
   {
     api_key: "402784613679330",
     full_name: fullName,
