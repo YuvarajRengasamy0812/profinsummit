@@ -78,7 +78,7 @@ const TicketModal = ({ ticket, onClose }) => {
           {/* QR */}
           <div className="text-center my-4">
             <QRCodeCanvas
-              value={`TICKET-${ticket.orderId}`}
+              value={`TICKET-${ticket.qrCode}`}
               size={180}
             />
             <p className="text-grey mt-2 small">Scan at Entry</p>
@@ -87,7 +87,7 @@ const TicketModal = ({ ticket, onClose }) => {
           {/* DETAILS */}
           <ul className="list-unstyled small mb-4">
             <li><b>Event:</b> PROFIN BLOCKCHAIN SUMMIT 2026</li>
-            <li><b>Order ID:</b> {ticket.orderId}</li>
+            <li><b>Order ID:</b> {ticket.qrCode}</li>
             <li>
               <b>Status:</b>{" "}
               <span className={`badge ${ticket.status === "Active" ? "bg-success" : "bg-secondary"}`}>
