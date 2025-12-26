@@ -2,26 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { getAllHeader } from '../api/header';
+import ProfileDropdown from './ProfileDropdown';
 
 const CustomNavbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [menuLinks, setMenuLinks] = useState([]);
-      useEffect(() => {
-        getHedaerList()
-       
-    }, [])
+  useEffect(() => {
+    getHedaerList()
 
-     const getHedaerList = () => {
-        getAllHeader()
-            .then((res) => {
-              console.log("header data", res);
-                setMenuLinks(res?.data?.links);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    };
+  }, [])
+
+  const getHedaerList = () => {
+    getAllHeader()
+      .then((res) => {
+        console.log("header data", res);
+        setMenuLinks(res?.data?.links);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
 
   return (
@@ -52,12 +53,16 @@ const CustomNavbar = () => {
       </ul>
 
       {/* MOBILE MENU BUTTON */}
-      <button
-        className="cust-mobile-toggle"
-        onClick={() => setMobileOpen(true)}
-      >
-        <Menu size={32} />
-      </button>
+      <div className="d-flex align-items-center d-lg-none">
+        <ProfileDropdown user={{ avatar: "/assets/images/resources/avatar.png" }} />
+        <button
+          className="cust-mobile-toggle"
+          onClick={() => setMobileOpen(true)}
+        >
+          <Menu size={32} />
+        </button>
+      </div>
+
 
       {/* MOBILE OVERLAY */}
       {mobileOpen && (
@@ -86,9 +91,8 @@ const CustomNavbar = () => {
                   {link.title} <ChevronDown size={16} className={companyOpen ? "rotate" : ""} />
                 </button>
                 <div
-                  className={`cust-mobile-dropdown-menu ${
-                    companyOpen ? "cust-show" : ""
-                  }`}
+                  className={`cust-mobile-dropdown-menu ${companyOpen ? "cust-show" : ""
+                    }`}
                 >
                   {link.sub_links.map((sub) => (
                     <Link

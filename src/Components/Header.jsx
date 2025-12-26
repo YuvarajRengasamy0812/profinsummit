@@ -6,7 +6,7 @@ import CustomNavbar from "./CustomNavbar";
 import { getAllSocial } from '../api/socialmedia';
 import { getAllTopBar } from '../api/topbar';
 import { getAllLog } from '../api/style';
-
+import ProfileDropdown from './ProfileDropdown';
 
 
 const Header = () => {
@@ -32,7 +32,7 @@ const Header = () => {
         console.log(err);
       });
   };
-  
+
   const getTopBarList = () => {
     getAllTopBar()
       .then((res) => {
@@ -46,7 +46,7 @@ const Header = () => {
   const getLogo = () => {
     getAllLog()
       .then((res) => {
-    
+
         setLogo(res?.data?.details);
       })
       .catch((err) => {
@@ -164,8 +164,9 @@ const Header = () => {
               </div>
 
               <div className="col-lg-3 d-none d-lg-block">
-                <div className="menu-search">
-                  <Search className="d-md-none" />
+                <div className="menu-search d-flex align-items-center gap-3">
+                  {/* <Search className="d-md-none" /> */}
+                  <ProfileDropdown user={{ avatar: "/assets/images/resources/avatar.png" }} />
                   <Link to="/Booknow" className="btn btn3">
                     Buy Ticket <i className="fa fa-long-arrow-right ms-4"></i>
                   </Link>
@@ -176,7 +177,6 @@ const Header = () => {
           <div id="slicknav-mobile"></div>
         </div>
       </div>
-
       {/* Search Overlay */}
       <div id="search1">
         <button type="button" className="close">

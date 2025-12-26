@@ -32,6 +32,7 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 import ForgotPassword from "./Pages/ForgotPassword";
 import ResetPassword from "./Pages/ResetPassword";
+import Profile from "./Pages/Profile";
 function App() {
   const location = useLocation();
   const hideHeaderFooter = location.pathname === "/Comingsoon";
@@ -59,6 +60,7 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/ResetPassword" element={<ResetPassword />} />
+          <Route path="/MyProfile" element={<Profile />} />
           <Route path="/" element={<Home />} />
           <Route path="/About" element={<About />} />
           <Route path="/Contact" element={<Contact />} />
