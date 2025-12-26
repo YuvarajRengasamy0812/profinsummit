@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 const TicketBookingModal = ({ ticket, onClose }) => {
   const [step, setStep] = useState(1);
   const [persons, setPersons] = useState(1);
   const [user, setUser] = useState(null);
   const [visitors, setVisitors] = useState([{ name: "", email: "", phone: "", idType: "", idNumber: "" }]);
   const [paymentMethod, setPaymentMethod] = useState(null);
-    const [amount,setAmount]=useState(null);
-       const [code,setCode]=useState(null);
- const [paymentImage, setPaymentImage] = useState(null); // file input
+  const [amount, setAmount] = useState(null);
+  const [code, setCode] = useState(null);
+  const [paymentImage, setPaymentImage] = useState(null); // file input
+  const [errors, setErrors] = useState({});
+
   const subtotal = ticket.price * persons;
   const taxAmt = subtotal * 0.18;
   const total = subtotal + taxAmt;
 
-
-
+  // Function to handle number of persons change
   const handlePersonsChange = (value) => {
     const count = Number(value);
     setPersons(count);
@@ -31,31 +34,55 @@ const TicketBookingModal = ({ ticket, onClose }) => {
   };
 
 
-   const handleVisitorChange = (index, field, value) => {
+  // Function to handle visitor field changes
+  const handleVisitorChange = (index, field, value) => {
     const updated = [...visitors];
     updated[index][field] = value;
     setVisitors(updated);
   };
-  
-   const handleSubmit = async () => {
+
+  // Function to handle form submission
+  const handleSubmit = async () => {
     if (!paymentMethod || !paymentImage) {
-      alert("Payment method and payment screenshot are required!");
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "warning",
+        title: "Payment method and screenshot are required!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          container: 'swal2-toast-container-high-z',
+        }
+      });
       return;
     }
+
+    // Show processing toast
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      title: "Processing...",
+      showConfirmButton: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+      customClass: {
+        container: 'swal2-toast-container-high-z',
+      }
+    });
 
     const formData = new FormData();
     formData.append("api_key", "402784613679330");
     formData.append("ticket_type", ticket.name);
         formData.append("user_id", user.id);
     formData.append("payment_type", paymentMethod);
-    formData.append("amount",total );
-formData.append("refer_count",persons );
-formData.append("refer_code",code );
-    // Attach payment image
+    formData.append("amount", total);
+    formData.append("refer_count", persons);
+    formData.append("refer_code", code);
     formData.append("payment_image", paymentImage);
-   
 
-    // Attach users array
     visitors.forEach((v, i) => {
       formData.append(`tickets[${i}][name]`, v.name);
       formData.append(`tickets[${i}][email]`, v.email);
@@ -69,18 +96,40 @@ formData.append("refer_code",code );
       const response = await axios.post(
         "https://staging.profinsummit.com/adminpanel/api/v1/ticket-submit",
         formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        { headers: { "Content-Type": "multipart/form-data" } }
       );
-      console.log(response.data);
-      alert("Ticket submitted successfully!");
+
+      Swal.close(); // Close the processing toast
+
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        title: "Ticket submitted successfully!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          container: 'swal2-toast-container-high-z',
+        }
+      });
+
       onClose();
     } catch (error) {
-      console.error(error.response?.data || error.message);
-      alert("Error submitting ticket!");
+      Swal.close(); // Close the processing toast
+
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "error",
+        title: "Error submitting ticket!",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          container: 'swal2-toast-container-high-z',
+        }
+      });
     }
   };
 
@@ -108,19 +157,101 @@ formData.append("refer_code",code );
     };
   }, [onClose]);
 
-  // Early return if user is not loaded yet
-  if (!user) {
-    return (
-      <div className="container-fluid bg-lightgrey py-6 min-vh-100">
-        <div className="container">
-          <p>Loading profile...</p>
-        </div>
-      </div>
-    );
+  // Function to validate current step
+
+const validateStep = () => {
+  const newErrors = {};
+
+  // Step 1 validation
+  if (step === 1) {
+    if (!persons || persons < 1) {
+      const message = "*Please enter a valid number of persons.";
+      newErrors.persons = message;
+      Swal.fire({
+        toast: true,
+        icon: 'error',
+        title: message,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        customClass: {
+          container: 'swal2-toast-container-high-z',
+        },
+      });
+    }
   }
 
+  // Step 2 validation (dynamic visitors)
+  if (step === 2) {
+  let step2Errors = [];
+
+  visitors.forEach((v, i) => {
+    if (!v.name || !v.email || !v.phone || !v.idType || !v.idNumber) {
+      const message = `*Please fill all fields for Visitor ${i + 1}`;
+      newErrors[`visitor${i}`] = message;
+      step2Errors.push(message);
+    }
+  });
+
+  // Show all missing visitors in one toast
+  if (step2Errors.length > 0) {
+    Swal.fire({
+      toast: true,
+      icon: 'error',
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 4000,
+      customClass: {
+        container: 'swal2-toast-container-high-z',
+      },
+      html: step2Errors.map(msg => `<div>${msg}</div>`).join(''), // only html
+    });
+  }
+}
+
+
+  // Step 3 validation
+  if (step === 3) {
+    if (!paymentMethod) {
+      const message = "Please select a payment method.";
+      newErrors.paymentMethod = message;
+      Swal.fire({
+        toast: true,
+        icon: 'error',
+        title: message,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        customClass: {
+          container: 'swal2-toast-container-high-z',
+        },
+      });
+    }
+    if (!amount || !paymentImage) {
+      const message = "*Please provide paid amount and upload payment screenshot.";
+      newErrors.payment = message;
+      Swal.fire({
+        toast: true,
+        icon: 'error',
+        title: message,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        customClass: {
+          container: 'swal2-toast-container-high-z',
+        },
+      });
+    }
+  }
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0; // no errors
+};
+
+
+
   return (
-    <div className="custom-modal-overlay">
+    <div className="ticket-custom-modal-overlay">
       <div className="ticket-custom-modal">
 
         {/* Header */}
@@ -149,6 +280,7 @@ formData.append("refer_code",code );
                 value={persons}
                 onChange={(e) => handlePersonsChange(e.target.value)}
               />
+              {errors.persons && <div className="text-danger text-sm mt-1">{errors.persons}</div>}
             </div>
 
             <div className="form-group">
@@ -157,7 +289,9 @@ formData.append("refer_code",code );
             </div>
 
             <div className="modal-footer">
-              <button className="btn bg-pink text-white" onClick={() => setStep(2)} >
+              <button className="btn bg-pink text-white" onClick={() => {
+                if (validateStep()) setStep(2);
+              }} >
                 Continue
               </button>
             </div>
@@ -174,10 +308,11 @@ formData.append("refer_code",code );
                   {visitors.map((v, i) => (
                     <div key={i} className="visitor-box mb-4 p-3 border rounded d-flex flex-column gap-2 bg-white">
                       <h6 className="pink">Visitor {i + 1}</h6>
-                      <input type="text" className="form-control" placeholder="Name (Same as ID)" value={v.name} onChange={(e) => handleVisitorChange(i, "name", e.target.value)}/>
-                      <input type="email" className="form-control" placeholder="Email" value={v.email} onChange={(e) => handleVisitorChange(i, "email", e.target.value)}/>
-                      <input type="text" className="form-control" placeholder="Phone (with country code)"  value={v.phone} onChange={(e) => handleVisitorChange(i, "phone", e.target.value)}/>
-                      <select  value={v.idType} onChange={(e) => handleVisitorChange(i, "idType", e.target.value)}>
+                      {errors[`visitor${i}`] && <div className="text-danger text-sm mt-1">{errors[`visitor${i}`]}</div>}
+                      <input type="text" className="form-control" placeholder="Name (Same as ID)" value={v.name} onChange={(e) => handleVisitorChange(i, "name", e.target.value)} />
+                      <input type="email" className="form-control" placeholder="Email" value={v.email} onChange={(e) => handleVisitorChange(i, "email", e.target.value)} />
+                      <input type="text" className="form-control" placeholder="Phone (with country code)" value={v.phone} onChange={(e) => handleVisitorChange(i, "phone", e.target.value)} />
+                      <select value={v.idType} onChange={(e) => handleVisitorChange(i, "idType", e.target.value)}>
                         <option>ID Type</option>
                         <option>Aadhar</option>
                         <option>Driving License</option>
@@ -185,7 +320,7 @@ formData.append("refer_code",code );
                         <option>Voter ID</option>
                         <option>PAN Card</option>
                       </select>
-                      <input type="text" className="form-control" placeholder="ID Number" value={v.idNumber} onChange={(e) => handleVisitorChange(i, "idNumber", e.target.value)}/>
+                      <input type="text" className="form-control" placeholder="ID Number" value={v.idNumber} onChange={(e) => handleVisitorChange(i, "idNumber", e.target.value)} />
                     </div>
                   ))}
                 </div>
@@ -211,7 +346,9 @@ formData.append("refer_code",code );
             {/* Modal Footer */}
             <div className="modal-footer d-flex flex-column flex-md-row justify-content-between mt-4">
               <button className="btn border-pink mb-2 mb-md-0" onClick={() => setStep(1)}>Back</button>
-              <button className="btn bg-pink text-white" onClick={() => setStep(3)}>
+              <button className="btn bg-pink text-white" onClick={() => {
+                if (validateStep()) setStep(3);
+              }}>
                 Continue to Payment
               </button>
             </div>
@@ -295,10 +432,13 @@ formData.append("refer_code",code );
                     <span className="text-center">UPI ID: <br />profxevent@indianbank</span>
                   </div>
                   <div className="col-lg-6 col-12 d-flex flex-column gap-3 justify-content-center align-items-start">
-                    <h6 className="text-center text-lg-start">After Payment done please share the screenshot</h6>
-                    <input className="" type="text" placeholder="Paid Amount"   onChange={(e) => setAmount(e.target.value)}/>
-                    <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])}/>
-                    <button className="btn bg-pink text-white">Submit</button>
+                    <h6 className="text-center text-lg-start">Upload Payment Proof for Verification</h6>
+                    <label htmlFor="total">
+                      Amount to be Paid
+                    </label>
+                    <input className="" type="text" placeholder="Paid Amount" value={total} disabled />
+                    <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])} />
+                    {/* <button className="btn bg-pink text-white">Submit</button> */}
                   </div>
                 </div>
               </div>
@@ -326,16 +466,19 @@ formData.append("refer_code",code );
                   </div>
 
                   {/* Payment Form Section */}
-                  <div className="col-lg-6 col-12 d-flex flex-column gap-3 justify-content-center align-items-center">
-                    <h6 className="text-center text-lg-start">After Payment done please share the screenshot</h6>
+                  <div className="col-lg-6 col-12 d-flex flex-column gap-3 justify-content-center">
+                    <h6 className="text-center text-lg-start">Upload Payment Proof for Verification</h6>
                     <select >
                       <option>Select Network</option>
                       <option>TRON (TRC20)</option>
                       <option>ETHEREUM (ERC20)</option>
                     </select>
-                    <input type="text" className="form-control"   onChange={(e) => setAmount(e.target.value)} placeholder="Paid Amount" />
+                    <label htmlFor="total">
+                      Amount to be Paid
+                    </label>
+                    <input type="text" className="text-start" value={total} disabled  placeholder="Paid Amount" />
                     <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])} />
-                   
+
                   </div>
                 </div>
               </div>
@@ -363,9 +506,14 @@ formData.append("refer_code",code );
 
                   {/* RIGHT SIDE — USER INPUT */}
                   <div className="bank-upload ">
+                    <h6 className="text-center text-lg-start">Upload Payment Proof for Verification</h6>
+                    <label htmlFor="total">
+                      Amount to be Paid
+                    </label>
                     <input
-                      type="number"
-                    onChange={(e) => setAmount(e.target.value)}
+                      type="text"
+                      value={total}
+                      disabled
                       placeholder="Paid Amount"
                       className="form-input border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-pink"
                     />
@@ -376,16 +524,16 @@ formData.append("refer_code",code );
                       onChange={(e) => setPaymentImage(e.target.files[0])}
                     />
 
-                   
+
                   </div>
                 </div>
               </div>
             )}
 
             <div className="modal-footer">
-               <button className="btn bg-pink text-white w-full py-3 rounded-md hover:bg-pink/90 transition"onClick={handleSubmit}>
-                      Submit Deposit
-                    </button>
+              <button className="btn bg-pink text-white w-full py-3 rounded-md hover:bg-pink/90 transition" onClick={handleSubmit}>
+                Submit Deposit
+              </button>
               <button className="btn border-pink" onClick={() => setStep(2)}>Back</button>
             </div>
           </div>
