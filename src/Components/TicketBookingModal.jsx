@@ -1,12 +1,14 @@
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
-
+import axios from "axios";
 const TicketBookingModal = ({ ticket, onClose }) => {
   const [step, setStep] = useState(1);
   const [persons, setPersons] = useState(1);
   const [visitors, setVisitors] = useState([{ name: "", email: "", phone: "", idType: "", idNumber: "" }]);
   const [paymentMethod, setPaymentMethod] = useState(null);
-
+    const [amount,setAmount]=useState(null);
+       const [code,setCode]=useState(null);
+ const [paymentImage, setPaymentImage] = useState(null); // file input
   const subtotal = ticket.price * persons;
   const taxAmt = subtotal * 0.18;
   const total = subtotal + taxAmt;
@@ -25,6 +27,58 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     );
   };
 
+
+   const handleVisitorChange = (index, field, value) => {
+    const updated = [...visitors];
+    updated[index][field] = value;
+    setVisitors(updated);
+  };
+
+   const handleSubmit = async () => {
+    if (!paymentMethod || !paymentImage) {
+      alert("Payment method and payment screenshot are required!");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("api_key", "402784613679330");
+    formData.append("ticket_type", ticket.name);
+    formData.append("payment_type", paymentMethod);
+    formData.append("amount",amount );
+formData.append("refer_count",persons );
+formData.append("refer_code",code );
+    // Attach payment image
+    formData.append("payment_image", paymentImage);
+   
+
+    // Attach users array
+    visitors.forEach((v, i) => {
+      formData.append(`tickets[${i}][name]`, v.name);
+      formData.append(`tickets[${i}][email]`, v.email);
+      formData.append(`tickets[${i}][phone]`, v.phone);
+      formData.append(`tickets[${i}][id]`, `user${i+1}`); // temporary user_id
+      formData.append(`tickets[${i}][id_name]`, v.idType);
+      formData.append(`tickets[${i}][id_number]`, v.idNumber);
+    });
+
+    try {
+      const response = await axios.post(
+        "http://localhost/profinsummit/api/v1/ticket-submit",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(response.data);
+      alert("Ticket submitted successfully!");
+      onClose();
+    } catch (error) {
+      console.error(error.response?.data || error.message);
+      alert("Error submitting ticket!");
+    }
+  };
   useEffect(() => {
     const handleEsc = (event) => {
       if (event.key === "Escape") {
@@ -73,7 +127,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
 
             <div className="form-group">
               <label>Referral Code (Optional)</label>
-              <input type="text" placeholder="Enter referral code" />
+              <input type="text" placeholder="Enter referral code" onChange={(e) => setCode(e.target.value ? e.target.value : null)} />
             </div>
 
             <div className="modal-footer">
@@ -94,10 +148,10 @@ const TicketBookingModal = ({ ticket, onClose }) => {
                   {visitors.map((v, i) => (
                     <div key={i} className="visitor-box mb-4 p-3 border rounded d-flex flex-column gap-2 bg-white">
                       <h6 className="pink">Visitor {i + 1}</h6>
-                      <input type="text" className="form-control" placeholder="Name (Same as ID)" />
-                      <input type="email" className="form-control" placeholder="Email" />
-                      <input type="text" className="form-control" placeholder="Phone (with country code)" />
-                      <select>
+                      <input type="text" className="form-control" placeholder="Name (Same as ID)" value={v.name} onChange={(e) => handleVisitorChange(i, "name", e.target.value)}/>
+                      <input type="email" className="form-control" placeholder="Email" value={v.email} onChange={(e) => handleVisitorChange(i, "email", e.target.value)}/>
+                      <input type="text" className="form-control" placeholder="Phone (with country code)"  value={v.phone} onChange={(e) => handleVisitorChange(i, "phone", e.target.value)}/>
+                      <select  value={v.idType} onChange={(e) => handleVisitorChange(i, "idType", e.target.value)}>
                         <option>ID Type</option>
                         <option>Aadhar</option>
                         <option>Driving License</option>
@@ -105,7 +159,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
                         <option>Voter ID</option>
                         <option>PAN Card</option>
                       </select>
-                      <input type="text" className="form-control" placeholder="ID Number" />
+                      <input type="text" className="form-control" placeholder="ID Number" value={v.idNumber} onChange={(e) => handleVisitorChange(i, "idNumber", e.target.value)}/>
                     </div>
                   ))}
                 </div>
@@ -216,8 +270,8 @@ const TicketBookingModal = ({ ticket, onClose }) => {
                   </div>
                   <div className="col-lg-6 col-12 d-flex flex-column gap-3 justify-content-center align-items-start">
                     <h6 className="text-center text-lg-start">After Payment done please share the screenshot</h6>
-                    <input className="" type="text" placeholder="Paid Amount" />
-                    <input type="file" />
+                    <input className="" type="text" placeholder="Paid Amount"   onChange={(e) => setAmount(e.target.value)}/>
+                    <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])}/>
                     <button className="btn bg-pink text-white">Submit</button>
                   </div>
                 </div>
@@ -253,9 +307,9 @@ const TicketBookingModal = ({ ticket, onClose }) => {
                       <option>TRON (TRC20)</option>
                       <option>ETHEREUM (ERC20)</option>
                     </select>
-                    <input type="text" className="form-control" placeholder="Paid Amount" />
-                    <input type="file" />
-                    <button className="btn bg-pink text-white w-100">Submit</button>
+                    <input type="text" className="form-control"   onChange={(e) => setAmount(e.target.value)} placeholder="Paid Amount" />
+                    <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])} />
+                   
                   </div>
                 </div>
               </div>
@@ -285,6 +339,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
                   <div className="bank-upload ">
                     <input
                       type="number"
+                    onChange={(e) => setAmount(e.target.value)}
                       placeholder="Paid Amount"
                       className="form-input border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-pink"
                     />
@@ -292,17 +347,19 @@ const TicketBookingModal = ({ ticket, onClose }) => {
                     <input
                       type="file"
                       className="cursor-pointer"
+                      onChange={(e) => setPaymentImage(e.target.files[0])}
                     />
 
-                    <button className="btn bg-pink text-white w-full py-3 rounded-md hover:bg-pink/90 transition">
-                      Submit Deposit
-                    </button>
+                   
                   </div>
                 </div>
               </div>
             )}
 
             <div className="modal-footer">
+               <button className="btn bg-pink text-white w-full py-3 rounded-md hover:bg-pink/90 transition"onClick={handleSubmit}>
+                      Submit Deposit
+                    </button>
               <button className="btn border-pink" onClick={() => setStep(2)}>Back</button>
             </div>
           </div>
