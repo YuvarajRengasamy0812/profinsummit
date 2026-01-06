@@ -3,7 +3,7 @@ import { X } from "lucide-react";
 import axios from "axios";
 import Swal from "sweetalert2";
 
-const TicketBookingModal = ({ ticket, onClose }) => {
+const TicketBookingModal = ({ ticket, onClose, }) => {
   const [step, setStep] = useState(1);
   const [persons, setPersons] = useState(1);
   const [user, setUser] = useState(null);
@@ -76,7 +76,7 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     const formData = new FormData();
     formData.append("api_key", "402784613679330");
     formData.append("ticket_type", ticket.name);
-        formData.append("user_id", user.id);
+    formData.append("user_id", user.id);
     formData.append("payment_type", paymentMethod);
     formData.append("amount", total);
     formData.append("refer_count", persons);
@@ -133,9 +133,9 @@ const TicketBookingModal = ({ ticket, onClose }) => {
     }
   };
 
-  
 
-   // Load user from localStorage
+
+  // Load user from localStorage
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -159,94 +159,94 @@ const TicketBookingModal = ({ ticket, onClose }) => {
 
   // Function to validate current step
 
-const validateStep = () => {
-  const newErrors = {};
+  const validateStep = () => {
+    const newErrors = {};
 
-  // Step 1 validation
-  if (step === 1) {
-    if (!persons || persons < 1) {
-      const message = "*Please enter a valid number of persons.";
-      newErrors.persons = message;
-      Swal.fire({
-        toast: true,
-        icon: 'error',
-        title: message,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        customClass: {
-          container: 'swal2-toast-container-high-z',
-        },
+    // Step 1 validation
+    if (step === 1) {
+      if (!persons || persons < 1) {
+        const message = "*Please enter a valid number of persons.";
+        newErrors.persons = message;
+        Swal.fire({
+          toast: true,
+          icon: 'error',
+          title: message,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          customClass: {
+            container: 'swal2-toast-container-high-z',
+          },
+        });
+      }
+    }
+
+    // Step 2 validation (dynamic visitors)
+    if (step === 2) {
+      let step2Errors = [];
+
+      visitors.forEach((v, i) => {
+        if (!v.name || !v.email || !v.phone || !v.idType || !v.idNumber) {
+          const message = `*Please fill all fields for Visitor ${i + 1}`;
+          newErrors[`visitor${i}`] = message;
+          step2Errors.push(message);
+        }
       });
+
+      // Show all missing visitors in one toast
+      if (step2Errors.length > 0) {
+        Swal.fire({
+          toast: true,
+          icon: 'error',
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 4000,
+          customClass: {
+            container: 'swal2-toast-container-high-z',
+          },
+          html: step2Errors.map(msg => `<div>${msg}</div>`).join(''), // only html
+        });
+      }
     }
-  }
 
-  // Step 2 validation (dynamic visitors)
-  if (step === 2) {
-  let step2Errors = [];
 
-  visitors.forEach((v, i) => {
-    if (!v.name || !v.email || !v.phone || !v.idType || !v.idNumber) {
-      const message = `*Please fill all fields for Visitor ${i + 1}`;
-      newErrors[`visitor${i}`] = message;
-      step2Errors.push(message);
+    // Step 3 validation
+    if (step === 3) {
+      if (!paymentMethod) {
+        const message = "Please select a payment method.";
+        newErrors.paymentMethod = message;
+        Swal.fire({
+          toast: true,
+          icon: 'error',
+          title: message,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          customClass: {
+            container: 'swal2-toast-container-high-z',
+          },
+        });
+      }
+      if (!amount || !paymentImage) {
+        const message = "*Please provide paid amount and upload payment screenshot.";
+        newErrors.payment = message;
+        Swal.fire({
+          toast: true,
+          icon: 'error',
+          title: message,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          customClass: {
+            container: 'swal2-toast-container-high-z',
+          },
+        });
+      }
     }
-  });
 
-  // Show all missing visitors in one toast
-  if (step2Errors.length > 0) {
-    Swal.fire({
-      toast: true,
-      icon: 'error',
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 4000,
-      customClass: {
-        container: 'swal2-toast-container-high-z',
-      },
-      html: step2Errors.map(msg => `<div>${msg}</div>`).join(''), // only html
-    });
-  }
-}
-
-
-  // Step 3 validation
-  if (step === 3) {
-    if (!paymentMethod) {
-      const message = "Please select a payment method.";
-      newErrors.paymentMethod = message;
-      Swal.fire({
-        toast: true,
-        icon: 'error',
-        title: message,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        customClass: {
-          container: 'swal2-toast-container-high-z',
-        },
-      });
-    }
-    if (!amount || !paymentImage) {
-      const message = "*Please provide paid amount and upload payment screenshot.";
-      newErrors.payment = message;
-      Swal.fire({
-        toast: true,
-        icon: 'error',
-        title: message,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        customClass: {
-          container: 'swal2-toast-container-high-z',
-        },
-      });
-    }
-  }
-
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0; // no errors
-};
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // no errors
+  };
 
 
 
@@ -476,7 +476,7 @@ const validateStep = () => {
                     <label htmlFor="total">
                       Amount to be Paid
                     </label>
-                    <input type="text" className="text-start" value={total} disabled  placeholder="Paid Amount" />
+                    <input type="text" className="text-start" value={total} disabled placeholder="Paid Amount" />
                     <input type="file" onChange={(e) => setPaymentImage(e.target.files[0])} />
 
                   </div>
@@ -517,14 +517,11 @@ const validateStep = () => {
                       placeholder="Paid Amount"
                       className="form-input border border-gray-300 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-pink"
                     />
-
                     <input
                       type="file"
                       className="cursor-pointer"
                       onChange={(e) => setPaymentImage(e.target.files[0])}
                     />
-
-
                   </div>
                 </div>
               </div>
